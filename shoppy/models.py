@@ -55,7 +55,7 @@ class Seller(models.Model):
     email = models.EmailField(max_length=100, unique=True, null=False, blank=False)
     password = models.CharField(max_length=200)
     business_no = models.CharField(max_length=100,null=False, unique=True, blank=False)
-    store_logo= models.ImageField(default="", upload_to='store_logo', max_length=200, null=True) #height_field=None, width_field=None
+    store_logo= models.ImageField(default="nologo.jpg", upload_to='store_logo', max_length=200, null=True) #height_field=None, width_field=None
     store_name = models.CharField(max_length=100, null=False, unique=True)
     VERIFIED=1
     UNVERIFIED=2
