@@ -1,0 +1,274 @@
+{% load static %}
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+{#    <meta charset="US-ASCII">#}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+{#    <link rel="stylesheet" type="text/css" href="{% static "css/accordion.min.css" %}">#}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+
+    {% if title %}
+       <title>Shoppy-{{title}}</title>
+    {% else %}
+        <title>Shoppy</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  </head>
+  <body >
+
+    <nav class="navbar navbar-light bg-light top-nav">
+        <a class="navbar-brand" href="#">
+{#            src="{% get_media_prefix %}/sitelogo/shoppy.png"}#}
+            <img src="../../../shoppy/media/sitelogo/shoppy.png"  class="d-inline-block align-top logo" alt="">
+        </a>
+        <div class=" social d-flex">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="far fa-envelope"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top top-sticky-nav pr-4">
+            <div class="dropdown">
+                 <a class="navbar-brand pl-5 d-flex align-contents-center" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" >
+                      <i class="fas fa-bars"></i>
+                 </a>
+
+                <ul class="dropdown-menu category-container">
+                  <li class="category-list ">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Electronics</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+
+                  <li class="category-list">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Cloathing</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+                  <li class="category-list">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Cloathing</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+                  <li class="category-list">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Cloathing</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+                  <li class="category-list">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Cloathing</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+                  <li class="dropdown-submenu category-list ">
+                    <a class="test d-block category-title d-flex justify-content-between" tabindex="-1" href="#"> <span>Shoe</span> <i class="fas fa-caret-right fa-caret-right-custom"></i></a>
+                        <ul class="dropdown-menu col-sm-12 dropdown-subcategory-menu ">
+                            <li class="row">
+                                  <ul class="col-sm-4 sub-category-container">
+                                      <h3 class="sub-category-title">Mobile phones</h3>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">Infinix</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">Techno</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">Infinix</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">Techno</a></li>
+                                  </ul>
+                                  <ul class="col-sm-4 sub-category-container">
+                                      <h3 class="sub-category-title">tablets</h3>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">ipad</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">kids tablet</a></li>
+                                  </ul>
+
+                                  <ul class="col-sm-4 sub-category-container">
+                                      <h3 class="sub-category-title">tablets</h3>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">ipad</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">kids tablet</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">ipad</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">kids tablet</a></li>
+                                  </ul>
+                            </li>
+                            <li class="row">
+                                  <ul class="col-sm-4 sub-category-container">
+                                      <h3 class="sub-category-title">Mobile phones</h3>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">Infinix</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">Techno</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">Infinix</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">Techno</a></li>
+                                  </ul>
+                                  <ul class="col-sm-4 sub-category-container">
+                                      <h3 class="sub-category-title">tablets</h3>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">ipad</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">kids tablet</a></li>
+                                  </ul>
+
+                                  <ul class="col-sm-4 sub-category-container">
+                                      <h3 class="sub-category-title">tablets</h3>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">ipad</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">kids tablet</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">ipad</a></li>
+                                          <li><a class="sub-category-list" tabindex="-1" href="#">kids tablet</a></li>
+                                  </ul>
+                            </li>
+
+                        </ul>
+                  </li>
+                  <li class="category-list ">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Electronics</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+                  <li class="category-list ">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Electronics</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+                  <li class="category-list ">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Electronics</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+                  <li class="category-list ">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Electronics</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+                  <li class="category-list ">
+                      <a tabindex="-1" href="#" class="category-title d-flex justify-content-between"> <span>Electronics</span> <i class="fas fa-caret-right fa-caret-right-custom "></i></a>
+                  </li>
+
+                </ul>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse col-md-12 d-flex align-items-center " id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                      <li class="nav-item active">
+                        <a class="nav-link category text-white mr-7" href="#">CATEGORIES</a>
+                      </li>
+                </ul>
+                <form class="search-bar-container col-md-6">
+                    <input class="search-bar" type="search" placeholder="Search For Products" aria-label="Search">
+                    <button class="search-button" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                <div class="col-md-3 d-flex justify-content-end  align-items-center">
+                    <a class="nav-action wishlist">
+                        <i class="wishlist-icon fas fa-heart"></i>
+                        <span class="quantity">
+                            2
+                        </span>
+                    </a>
+                    <a class="nav-action cart">
+                        <i class=" cart-icon fas fa-shopping-cart"></i>
+                        <span class="quantity">
+                            2
+                        </span>
+                    </a>
+
+                    <div class="nav-action account d-flex username-container ml-5 dropdown">
+                      <a class="username dropdown-toggle text-white" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>username</span>
+                      </a>
+
+                      <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="dropdownMenuLink">
+                          <a class="btn login-btn dropdown-item" href="#">LogIn</a>
+                          <p class="sign-up-text dropdown-item">Need an account <a class=" text-primary" href="#">Sign-Up</a></p>
+                      </div>
+
+{#                        wen logged in#}
+{#                      <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="dropdownMenuLink">#}
+{#                          <a class="py-2 font-weight-bold dropdown-item" href="#">My account</a>#}
+{#                          <a class="py-2 font-weight-bold dropdown-item" href="#">My Wishlist <span>(10)</span></a>#}
+{#                          <a class="py-2 font-weight-bold dropdown-item" href="#">My Cart <span>(10)</span></a>#}
+{#                          <button class="btn login-btn dropdown-item" href="#">Logout</button>#}
+{#                      </div>#}
+                    </div>
+                </div>
+
+            </div>
+    </nav>
+
+
+
+
+    {% block content %}
+
+    {% endblock content %}
+
+    <div class="clear"></div>
+
+    <div class="col-md-12 ">
+            <div class="row">
+               <div class="footer p-6">
+                   <div class="col-md-3 help-section p-3">
+                       <h4 class="footer-header">Help</h4>
+                       <ul class="pl-0">
+                           <li class="link footer-link-list"><a class="footer-link" href="#">Get Help</a></li>
+                           <li class="link footer-link-list"><a class="footer-link" href="#">Return Policy</a></li>
+                           <li class="link footer-link-list"><a class="footer-link" href="#">Account Settings</a></li>
+                           <li class="link footer-link-list"><a class="footer-link" href="#">FAQ's</a></li>
+                       </ul>
+                   </div>
+                   <div class="col-md-3 address">
+                       <h4 class="footer-header">Get InTouch</h4>
+                       <p class="address ">Any questions? Let us know in store at 2th floor, 14 uchumi, Juja , NY 10018 or call us on </p>
+                       <a href="#" class="address  footer-link-list">eugene.were@yahoo.com</a>
+                       <p class="address pt-4 footer-link-list">+0706833784</p>
+                   </div>
+                   <div class="col-md-3 footer-social">
+                       <h4 class="footer-header">Social</h4>
+                       <div class="d-flex">
+                           <div class="footer-social-icon fb"><i class="fab fa-facebook-f"></i></div>
+                           <div class="footer-social-icon ins"><i class="fab fa-instagram"></i></div>
+                           <div class="footer-social-icon gp"><i class="fab fa-google-plus-g"></i></div>
+                           <div class="footer-social-icon tw"><i class="fab fa-instagram"></i></div>
+                           <div class="footer-social-icon wh"><i class="fab fa-google-plus-g"></i></div>
+                       </div>
+
+                   </div>
+                   <div class="col-md-3 footer-query">
+                       <div class="subscribeform">
+
+                           <div class="subscribe">
+                               <h4 class="footer-header">NewsLetter</h4>
+                                <form action="" class="d-flex flex-column">
+                                   <input type="email" class="footer-input" placeholder="Enter Email">
+                                   <button class="footer-button"  type="submit">Subscribe</button>
+                                </form>
+                           </div>
+
+                           <div class="subscribe mt-4">
+                               <h4 class="footer-header">Submit Query</h4>
+                                <form action="" class="d-flex flex-column">
+                                    <input type="email" class="footer-input" placeholder="Enter Email">
+                                    <textarea name="query" id="" cols="3" rows="7" class="footer-textarea" placeholder="Enter Query"></textarea>
+                                    <button class="footer-button" type="submit">Send</button>
+                                </form>
+                           </div>
+
+                       </div>
+                   </div>
+
+               </div>
+
+               <div class="col-sm-12">
+                   <div class="row">
+                       <div class="copyright w-100 d-flex align-items-center justify-content-center">
+                           <p class="footer-credits py-auto">Copyright <script> var yr = new Date().getFullYear(); document.write(yr);</script> All rights reserved </p>
+                       </div>
+                   </div>
+               </div>
+            </div>
+        </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/javascript.js' %}"></script>
+  </body>
+</html>
