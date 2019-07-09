@@ -45,7 +45,7 @@
                     </div>
                     <div class="row d-flex justify-content-between p-2" >
                         <span class="seller-name">By <a href="#">Infinix</a></span>
-                        <span class="saveproducticon"><i class="far fa-heart"></i></span>
+                        <span class="saveproducticon" onclick="snackBar()"><i class="far fa-heart"></i></span>
                     </div>
                     <div class="row">
                         <div class="d-flex justify-content-between col-sm-12">
@@ -70,7 +70,7 @@
                             <span class="striked-price justify-content-end">Ksh <span>32,000</span></span>
                         </div>
                         <div class="buynowbtn">
-                            <a href="" class="product-button  ">BuyNow</a>
+                            <button class="link product-button"><a href="" class="text-white">BuyNow</a></button>
                         </div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                                 <button type="button" class="btn btn-link accordion-header-text" data-toggle="collapse" data-target="#collapseOne"><i class="fa fa-plus"></i> Features</button>
                             </h2>
                         </div>
-                        <div id="collapseOne" class="collapse show rounded" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div id="collapseOne" class="collapse rounded" aria-labelledby="headingOne" data-parent="#accordionExample">
                             <div class="card-body  accordion-card-body">
                                 <div class="product-features-container p-4">
                                     <div class="col-sm-12 row">
@@ -169,19 +169,121 @@
                         </div>
                         <div id="collapseTwo" class="collapse " aria-labelledby="headingTwo" data-parent="#accordionExample">
                             <div class="card-body accordion-card-body">
-                                <p>Bootstrap is a sleek, intuitive, and powerful front-end framework for faster and easier web development. It is a collection of CSS and HTML conventions. <a href="https://www.tutorialrepublic.com/twitter-bootstrap-tutorial/" target="_blank">Learn more.</a></p>
+                                <div class="ratings col-sm-12">
+                                    <div class="row">
+                                        <div class="col-md-6 border-right border-dark">
+                                            <h3 class="ratings-header">Average Ratings</h3>
+                                            <div class="star-ratings">
+                                                <span class="rating-count-lg"><i class="fas fa-star"></i></span>
+                                                <span class="average-ratings">5</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h3 class="ratings-header py-3">Have You Used This Product</h3>
+                                            <div class="card-ratings-wrapper ">
+                                                <span class="rating-count rating-count-md"><i class="far fa-star"></i></span>
+                                                <span class="rating-count rating-count-md"><i class="far fa-star"></i></span>
+                                                <span class="rating-count rating-count-md"><i class="far fa-star"></i></span>
+                                                <span class="rating-count rating-count-md"><i class="far fa-star"></i></span>
+                                                <span class="rating-count rating-count-md"><i class="far fa-star"></i></span>
+                                            </div>
+                                            <div class="comment-form my-3">
+                                                <form action="">
+                                                    <textarea class="text-area text-area-custom footer-textarea" name="" id="" cols="30" rows="7"></textarea>
+                                                    <button class="product-button ">Submit Comment</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row px-3">
+                                        <h3 class="ratings-header">All reviews</h3>
+                                        <div class="reviews col-sm-12 d-flex py-4">
+                                           <div class="col-sm-5 buyer-rating-wrapper">
+                                               <h4 class="ratings-user-header">Eugene Were</h4>
+                                               <span class="ratings-user-date ">June 30, 2019</span>
+                                           </div>
+                                           <div class="col-sm-7">
+                                               <div class="card-ratings-wrapper">
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                               </div>
+                                               <div class="">
+                                                   <p class="comment">The phone has a great camera. Other features are also okay. </p>
+                                               </div>
+                                           </div>
+                                        </div>
+                                        <div class="reviews col-sm-12 d-flex py-4">
+                                           <div class="col-sm-5 buyer-rating-wrapper">
+                                               <h4 class="ratings-user-header">Eugene Were</h4>
+                                               <span class="ratings-user-date">June 30, 2019</span>
+                                           </div>
+                                           <div class="col-sm-7">
+                                               <div class="card-ratings-wrapper">
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                                    <span class="rating-count"><i class="far fa-star"></i></span>
+                                               </div>
+                                               <div class="comment">
+                                                   <p>The phone has a great camera. Other features are also okay. </p>
+                                               </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-header accordion-card-heading" id="headingThree">
                             <h2 class="mb-0">
-                                <button type="button" class="btn btn-link collapsed accordion-header-text" data-toggle="collapse" data-target="#collapseThree"><i class="fa fa-plus"></i> Other Sellers</button>
+                                <button type="button" class="btn btn-link collapsed accordion-header-text" data-toggle="collapse" data-target="#collapseThree"><i class="fa fa-plus"></i> Simillar Product</button>
                             </h2>
                         </div>
                         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                             <div class="card-body accordion-card-body">
-                                <p>CSS stands for Cascading Style Sheet. CSS allows you to specify various style properties for a given HTML element such as colors, backgrounds, fonts etc. <a href="https://www.tutorialrepublic.com/css-tutorial/" target="_blank">Learn more.</a></p>
+                                <div class="sellerproductscontainer">
+
+                                <table id="dtMaterialDesignExample" class="table table-striped" cellspacing="0" width="100%">
+                                      <thead>
+                                        <tr>
+                                          <th class="th-sm">Seller
+                                          </th>
+                                          <th class="th-sm">Product Name
+                                          </th>
+                                          <th class="th-sm">Store Name
+                                          </th>
+                                          <th class="th-sm">Region
+                                          </th>
+                                          <th class="th-sm">Price
+                                          </th>
+                                            <th></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                          <a href="#">
+                                              <tr class="py-3">
+                                                  <td class="seller-name">Eugene Were</td>
+                                                  <td class="seller-product">INFINIX HOT S4, 6.2", 32GB + 3GB(DUAL SIM), BLUE</td>
+                                                  <td class="seller-store">KENYA ELECTRONICS</td>
+                                                  <td class="seller-region">nairobi</td>
+                                                  <td class="seller-price">17,000</td>
+                                                  <td class="d-flex justify-content-center align-items-center link"><a href="#" class="product-button text-center">Buy Now</a></td>
+                                              </tr>
+                                          </a>
+
+
+
+
+
+                                      </tbody>
+
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,178 @@
+{% extends 'shoppy/layout.html' %}
+
+{% block content %}
+
+    <div class="col-sm-12 row px-5 d-flex justify-content-center">
+        <!-- Editable table -->
+            <div class="card cart-container">
+              <h3 class="card-header text-left cart-header-text text-uppercase py-4">Cart (4)</h3>
+              <div class="card-body cart-table-body">
+                <div id="table" class="table-editable">
+                  <span class="table-add float-right mb-3 mr-2"><a href="#" class="text-success"><i
+                        class="fas fa-plus fa-2x" aria-hidden="true"></i></a>
+                  </span>
+                  <table class="table table-bordered table-responsive-md table-striped text-center">
+                    <thead>
+                      <tr>
+                        <th class="text-center cart-prod-table-header cdth">Item</th>
+                        <th class="text-center cart-prod-table-header">Variant</th>
+                        <th class="text-center cart-prod-table-header">Quantity</th>
+                        <th class="text-center cart-prod-table-header">Action</th>
+                        <th class="text-center cart-prod-table-header">Unit Price</th>
+                        <th class="text-center cart-prod-table-header">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="pt-3-half d-flex align-items-center " contenteditable="false">
+                            <div class="imagescrollimg m-0">
+                                <img src="../../../shoppy/media/productimages/product2.jpg" alt="cartproduct">
+                            </div>
+                            <div class="cart-prod-name-wrapper pl-4">
+                                <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
+                            </div>
+
+                        </td>
+                        <td class="pt-3-half  " contenteditable="false">30</td>
+                        <td class="pt-3-half d-flex justify-content-center" contenteditable="false">
+                            <div class="slider-container">
+                                <button onclick="subtract()" class="slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
+                                <span class="slider-contents slider-contents-center d-flex justify-content-center align-items-center slider_count" id="slider_count">0</span>
+                                <button onclick="add()" class="slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">
+                            <div>
+                                <span class="">
+                                    <button type="button" class="delete-button"><i class="far fa-heart"></i></button>
+                                 </span>
+                                 <span class="table-remove">
+                                    <button type="button" class="delete-button"><i class="fas fa-trash"></i></button>
+                                 </span>
+                            </div>
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">Ksh 12,000</td>
+                        <td class="pt-3-half" contenteditable="false">Ksh 19,000</td>
+                      </tr>
+                      <!-- This is our clonable table line -->
+                      <tr>
+                        <td class="pt-3-half d-flex align-items-center " contenteditable="false">
+                            <div class="imagescrollimg m-0">
+                                <img src="../../../shoppy/media/productimages/product4.jpg" alt="cartproduct">
+                            </div>
+                            <div class="cart-prod-name-wrapper pl-4">
+                                <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
+                            </div>
+
+                        </td>
+                        <td class="pt-3-half  " contenteditable="false">30</td>
+                        <td class="pt-3-half d-flex justify-content-center" contenteditable="false">
+                            <div class="slider-container">
+                                <button onclick="subtract()" class="slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
+                                <span class="slider-contents slider-contents-center d-flex justify-content-center align-items-center slider_count" id="slider_count">0</span>
+                                <button onclick="add()" class="slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">
+                            <div>
+                                <span class="">
+                                    <button type="button" class="delete-button"><i class="far fa-heart"></i></button>
+                                 </span>
+                                 <span class="table-remove">
+                                    <button type="button" class="delete-button"><i class="fas fa-trash"></i></button>
+                                 </span>
+                            </div>
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">Ksh 12,000</td>
+                        <td class="pt-3-half" contenteditable="false">Ksh 19,000</td>
+                      </tr>
+                      <!-- This is our clonable table line -->
+                      <tr>
+                        <td class="pt-3-half d-flex align-items-center " contenteditable="false">
+                            <div class="imagescrollimg m-0">
+                                <img src="../../../shoppy/media/productimages/product3.jpg" alt="cartproduct">
+                            </div>
+                            <div class="cart-prod-name-wrapper pl-4">
+                                <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
+                            </div>
+
+                        </td>
+                        <td class="pt-3-half  " contenteditable="false">30</td>
+                        <td class="pt-3-half d-flex justify-content-center" contenteditable="false">
+                            <div class="slider-container">
+                                <button onclick="subtract()" class="slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
+                                <span class="slider-contents slider-contents-center d-flex justify-content-center align-items-center slider_count" id="slider_count">0</span>
+                                <button onclick="add()" class="slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">
+                            <div>
+                                <span class="">
+                                    <button type="button" class="delete-button"><i class="far fa-heart"></i></button>
+                                 </span>
+                                 <span class="table-remove">
+                                    <button type="button" class="delete-button"><i class="fas fa-trash"></i></button>
+                                 </span>
+                            </div>
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">Ksh 12,000</td>
+                        <td class="pt-3-half" contenteditable="false">Ksh 19,000</td>
+                      </tr>
+                      <!-- This is our clonable table line -->
+                      <tr class="hide">
+                        <td class="pt-3-half d-flex align-items-center " contenteditable="false">
+                            <div class="imagescrollimg m-0">
+                                <img src="../../../shoppy/media/productimages/product2.jpg" alt="cartproduct">
+                            </div>
+                            <div class="cart-prod-name-wrapper pl-4">
+                                <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
+                            </div>
+
+                        </td>
+                        <td class="pt-3-half  " contenteditable="false">30</td>
+                        <td class="pt-3-half d-flex justify-content-center" contenteditable="false">
+                            <div class="slider-container">
+                                <button onclick="subtract()" class="slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
+                                <span class="slider-contents slider-contents-center d-flex justify-content-center align-items-center slider_count" id="slider_count">0</span>
+                                <button onclick="add()" class="slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">
+                            <div>
+                                <span class="">
+                                    <button type="button" class="delete-button"><i class="far fa-heart"></i></button>
+                                 </span>
+                                 <span class="table-remove">
+                                    <button type="button" class="delete-button"><i class="fas fa-trash"></i></button>
+                                 </span>
+                            </div>
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">Ksh 12,000</td>
+                        <td class="pt-3-half" contenteditable="false">Ksh 19,000</td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+
+                        <tr >
+                            <td colspan="4"></td>
+                            <td colspan="2">
+                                <div class="totals d-flex flex-column justify-content-center">
+                                    <span class="sub-totals sub-totals-custom py-3">Ksh 100,000</span>
+                                    <span class="totals py-3">Ksh 100,000</span>
+                                    <a href="#" class="product-button text-white mt-4">Buy Now</a>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+        <!-- Editable table -->
+    </div>
+
+
+
+
+{% endblock content %}
