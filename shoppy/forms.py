@@ -1,6 +1,7 @@
+
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Buyer
+from .models import Buyer, Seller
 from django import forms
 
 
@@ -10,21 +11,38 @@ class BuyerSignUpForm(UserCreationForm):
         model = Buyer
         fields = ('username','first_name', 'last_name','phone_number',)
 
-# class BuyerForm(forms.ModelForm):
-#     # password = forms.CharField(widget=forms.PasswordInput())
-#     # confirm_password = forms.CharField(widget=forms.PasswordInput())
-#     # email=forms.CharField(widget=forms.EmailInput())
-#     class Meta:
-#         model=Buyer
-#         fields=('first_name','last_name','phone_number','email','password')
-#
-#         # def clean(self):
-#         #     cleaned_data = super(BuyerForm, self).clean()
-#         #     password = cleaned_data.get("password")
-#         #     confirm_password = cleaned_data.get("confirm_password")
-#         #
-#         #     if password != confirm_password:
-#         #         raise forms.ValidationError(
-#         #             "password and confirm_password does not match"
-#         #         )
-#         # def clean_email(self, *args, **kwargs):
+
+
+class BuyerUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Buyer
+        fields = ('username','first_name', 'last_name','phone_number',)
+
+
+
+
+
+
+
+
+
+# seller
+class SellerSignUpForm(UserCreationForm):
+
+     class Meta:
+         model = Seller
+         fields = ('phone_number','business_no','store_logo','store_name','country','first_name','last_name','username',)
+
+
+class SellerUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Seller
+        fields = ('phone_number','business_no','store_name','country','first_name','last_name','username',)
+
+class SellerLogoUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model=Seller
+        fields=('store_logo',)

@@ -34,10 +34,10 @@
             {% endfor %}
           {% endif %}
 
-        <h2 class="py-4">Buyer Registration</h2>
-            <form class="needs-validation" novalidate action="{% url 'Shoppy:shoppy-buyer-reg' %}" method="POST">
+        <h2 class="py-4">Seller Registration</h2>
+            <form class="needs-validation" novalidate action="{% url 'Shoppy:shoppy-seller-reg' %}" method="POST">
                 {% csrf_token %}
-                  <div class="">
+
 
                     <div class="col-md-12 mb-3">
                       <label for="validationCustom01">First name</label>
@@ -80,8 +80,8 @@
                       </div>
                     </div>
 
-                  </div>
-                  <div class="">
+
+
                     <div class="col-md-12 mb-3">
                       <label for="validationCustom03">Phone number</label>
                       <input name="phone_number" type="number" class="form-control" id="validationCustom03" placeholder="Phone number" required>
@@ -92,6 +92,70 @@
                         Nice .
                       </div>
                     </div>
+
+                     <div class="col-md-12 mb-3">
+                      <label for="validationCustom03">Business Number</label>
+                      <input name="business_no" type="text" class="form-control" id="validationCustom03" placeholder="Business Number" required>
+
+                      <div class="invalid-feedback">
+                        Please provide a Business Number
+                      </div>
+                      <div class="valid-feedback">
+                        Nice .
+                      </div>
+                    </div>
+
+                     <div class="col-md-12 mb-3">
+                      <label for="validationCustom03">Store Name</label>
+                      <input name="store_name" type="text" class="form-control" id="validationCustom03" placeholder="Store Name" required>
+                      <div class="invalid-feedback">
+                        Please provide a Store Name.
+                      </div>
+                      <div class="valid-feedback">
+                        Nice.
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                      <label for="validationCustom03">Store Logo</label>
+                      <div class="input-group">
+                          <div class="input-group-prepend bg-orange-shoppy">
+                            <span class="input-group-text bg-orange-shoppy text-white" id="inputGroupFileAddon01">Logo</span>
+                          </div>
+                          <div class="custom-file">
+                            <input name="store_logo" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Choose your logo</label>
+                          </div>
+                      </div>
+                      <div class="invalid-feedback">
+                        Please provide a Store Logo.
+                      </div>
+                      <div class="valid-feedback">
+                        Nice.
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-12 mb-3">
+                      <label for="validationCustom03">County</label>
+                      <select name="country" class="selectpicker form-control">
+                        <option class="input-options-custom">Nairobi</option>
+                        <option class="input-options-custom">Kiambu</option>
+                        <option class="input-options-custom">Nakuru</option>
+                        <option class="input-options-custom">Nairobi</option>
+                        <option class="input-options-custom">Kiambu</option>
+                        <option class="input-options-custom">Nakuru</option>
+                        <option data-content="<span class='badge badge-success'>Relish</span>">Relish</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        Please provide a Country.
+                      </div>
+                      <div class="valid-feedback">
+                        Nice .
+                      </div>
+                    </div>
+
+
 
                     <div class="col-md-12 mb-3">
                       <label for="validationCustom04">Password</label>
@@ -120,8 +184,6 @@
                         Looks Good.
                       </div>
                     </div>
-
-                  </div>
 
                   <button class="product-button" type="submit">Submit form</button>
 

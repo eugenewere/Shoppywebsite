@@ -35,17 +35,26 @@ class Seller(get_user_model()):
     business_no = models.CharField(max_length=100,null=False, unique=True, blank=False)
     store_logo= models.ImageField(default="nologo.jpg", upload_to='store_logo', max_length=200, null=True) #height_field=None, width_field=None
     store_name = models.CharField(max_length=100, null=False, unique=True)
-    VERIFIED=1
-    UNVERIFIED=2
+    # VERIFIED=1
+    # UNVERIFIED=2
+
+    # SELLER_STATUS = (
+    #     (VERIFIED, 'Verified'),
+    #     (UNVERIFIED, 'Unverified'),
+    # )
+    # status = models.IntegerField(choices=SELLER_STATUS, max_length=100, default=VERIFIED)
 
     SELLER_STATUS=(
-        (VERIFIED,'Verified'),
-        (UNVERIFIED,'Unverified'),
+        ('VERIFIED','Verified'),
+        ('UNVERIFIED','Unverified'),
     )
-    status= models.CharField(choices=SELLER_STATUS, max_length=100, default=UNVERIFIED)
+    status= models.CharField(choices=SELLER_STATUS, max_length=100, default='Unverified')
     country = models.CharField(max_length=100, null=False)
     # created_at = models.DateTimeField(auto_now_add=True)
     # updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        verbose_name = 'Seller'
+        verbose_name_plural = 'Sellers'
 
     def __str__(self):
         return '%s %s (%s)' % (self.first_name, self.last_name, (self.store_name))
@@ -57,20 +66,21 @@ class Product(models.Model):
     product_brand = models.ForeignKey(Brand, on_delete=models.DO_NOTHING)
     short_description= models.TextField()
     long_description= models.TextField()
-    featured_url= models.ImageField(default="", upload_to="product_images", max_length=200) #height_field=None, width_field=None
-    
-    FEATURED = 1
-    NORMAL = 2
+    featured_url= models.ImageField(default="no_product_img.jpg", upload_to="product_images", max_length=200) #height_field=None, width_field=None
 
     PRODUCT_STATUS=(
-        (FEATURED,'Featured'),
-        (NORMAL,'Normal'),
+        ('FEATURED','Featured'),
+        ('NORMAL','Normal'),
     )
-    status=models.CharField(choices=PRODUCT_STATUS, default=NORMAL, max_length=200)
+    status=models.CharField(choices=PRODUCT_STATUS, default='Normal', max_length=200)
 
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
 
 
     def __str__(self):
@@ -88,6 +98,9 @@ class Buyer(get_user_model()):
     def __str__(self):
         return '%s %s'% (self.first_name, self.last_name)
 
+    class Meta:
+        verbose_name = 'Buyer'
+        verbose_name_plural = 'Buyers'
 # get_user_model()
 
 
@@ -149,14 +162,16 @@ class Checkout(models.Model):
     reference_code = models.CharField(max_length=10 )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    VERIFIED=1
-    UNVERIFIED=2
 
-    CHECKOUTSTATUS=(
-        (VERIFIED,'verified'),
-        (UNVERIFIED,'unverified'),
+    CHECKOUT_STATUS=(
+        ('VERIFIED','verified'),
+        ('UNVERIFIED','unverified'),
     )
-    status= models.CharField(choices=CHECKOUTSTATUS, max_length=100)
+    status= models.CharField(choices=CHECKOUT_STATUS, max_length=100, default='Unverified')
+
+    class Meta:
+        verbose_name = 'Checkout'
+        verbose_name_plural = 'Checkouts'
 
     def __str__(self):
         return '%s (%s)' % (self.buyer.name, (self.city))
@@ -183,14 +198,11 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    VERIFIED=1
-    UNVERIFIED=2
-
     PAYMENT=(
-        (VERIFIED,'verified'),
-        (UNVERIFIED,'unverified'),
+        ('VERIFIED','verified'),
+        ('UNVERIFIED','unverified'),
     )
-    status= models.CharField(choices=PAYMENT,max_length=100, default= UNVERIFIED)
+    status= models.CharField(choices=PAYMENT,max_length=100, default='Unverified')
 
 class Order_Delivery(models.Model):
     checkout= models.ForeignKey(Checkout,  on_delete=models.CASCADE)

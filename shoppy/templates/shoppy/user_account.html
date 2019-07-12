@@ -1,0 +1,455 @@
+
+{% extends 'shoppy/layout.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="user_account mb-6">
+        <div class="col-sm-12 py-6 ">
+            <h3 class="page-header ml-5" style="padding-left: 40px"><i class="far fa-user mr-3"></i> My Shoppy Account</h3>
+        </div>
+
+        <div class="col-sm-12 py-4 ">
+          <div class="d-flex justify-content-center align-content-center">
+              <div class="col-2 side-l-panel">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                  <a class="nav-link side-menu-btn active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><i class="fas fa-people-carry"></i> My Orders (10)</a>
+                  <a class="nav-link side-menu-btn" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false"><i class="fas fa-info-circle"></i> Details</a>
+                  <a class="nav-link side-menu-btn" id="v-pills-saved-tab" data-toggle="pill" href="#v-pills-saved" role="tab" aria-controls="v-pills-saved" aria-selected="false"><i class="far fa-heart"></i> Saved (8)</a>
+                  <a class="nav-link side-menu-btn" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-key"></i> Change Password</a>
+                  <a class="nav-link product-button product-button-custom text-white" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">LogOut</a>
+                </div>
+              </div>
+              <div class="col-9 side-r-panel">
+                <div class="tab-content" id="v-pills-tabContent">
+                  <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <div class="col-sm-12 ">
+                        <div class="row py-5">
+                            <h3 class="page-header">My Orders (3)</h3>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="text-muted size2">March 20,2019</span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="text-muted size2">March 20,2019</span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="text-muted size2">March 20,2019</span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="text-muted size2">March 20,2019</span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="text-muted size2">March 20,2019</span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="text-muted size2">March 20,2019</span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                      <div class="content-section-user Account">
+                          {% if errors %}
+                            <ul>
+                            {% for error in errors %}
+                              <p class=" alert alert-danger text-white">{{ error }}</p>
+                            {% endfor %}
+                            </ul>
+                          {% endif %}
+
+                          {% if messages %}
+                            <ul class="messages">
+                              {% for message in messages %}
+                              <p class=" alert alert-danger text-white" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                              {% endfor %}
+                            </ul>
+                          {% endif %}
+
+                          {% if form.errors %}
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                              <strong class="text-white">{{ error|escape }}</strong>
+                            </div>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger text-white">
+                              <strong>{{ error|escape }}</strong>
+                            </div>
+                            {% endfor %}
+                          {% endif %}
+
+                        <h2 class=" page-header py-4">User Account Details</h2>
+                            <form class="needs-validation" novalidate action="{% url 'Shoppy:shoppy-buyer-reg' %}" method="POST">
+                                {% csrf_token %}
+
+                                    <div class="col-md-12 row py-5 d-flex justify-content-center align-content-center">
+                                        <div class="col-md-5 mb-3 mr-1">
+                                          <label for="validationCustom01">First name</label>
+                                          <input name="first_name" type="text" class="form-control" id="validationCustom01" placeholder="First name" value="{{ request.user.first_name }}" required>
+                                          <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                          <div class="invalid-feedback">
+                                            Enter your First name
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-5 mb-3 m">
+                                          <label for="validationCustom02">Last name</label>
+                                          <input name="last_name" type="text" class="form-control" id="validationCustom02" placeholder="Last name" value="{{ request.user.last_name }}" required>
+                                          <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                          <div class="invalid-feedback">
+                                            Enter your Last name
+                                          </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 row py-5 -flex justify-content-center align-content-center">
+                                        <div class="col-md-5 mb-3 mr-1">
+                                          <label for="validationCustomUsername">Email</label>
+                                          <div class="input-group">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                            </div>
+                                            <input name="username" type="email" class="form-control" id="validationCustomUsername" value="{{ request.user.username }}" placeholder="Email" aria-describedby="inputGroupPrepend" required><br>
+
+                                             <div class="invalid-feedback">
+                                              Please enter your Email.
+                                            </div>
+                                            <div class="valid-feedback">
+                                              Looks even fantastic.
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-5 mb-3">
+                                          <label for="validationCustom03">Phone number</label>
+                                          <input name="phone_number" type="number" class="form-control" id="validationCustom03" value="{{ request.user.phone_number }}" placeholder="Phone number" required>
+                                          <div class="invalid-feedback">
+                                            Please provide a valid city.
+                                          </div>
+                                          <div class="valid-feedback">
+                                            Nice .
+                                          </div>
+                                        </div>
+                                  </div>
+                                    {% if user == 'seller' %}
+                                    <div class="col-sm-12 py-5 row d-flex justify-content-center align-content-center">
+
+                                        <div class="col-md-5 mb-3">
+                                          <label for="validationCustom03">Business Number</label>
+                                          <input name="business_no" type="text" class="form-control" id="validationCustom03" value="{{ request.user.business_no }}" placeholder="Business Number" required>
+
+                                          <div class="invalid-feedback">
+                                            Please provide a Business Number
+                                          </div>
+                                          <div class="valid-feedback">
+                                            Nice .
+                                          </div>
+                                        </div>
+
+
+                                         <div class="col-md-5 mb-3">
+                                          <label for="validationCustom03">Store Name</label>
+                                          <input name="store_name" type="text" class="form-control" id="validationCustom03" value="{{ request.user.store_name }}" placeholder="Store Name" required>
+                                          <div class="invalid-feedback">
+                                            Please provide a Store Name.
+                                          </div>
+                                          <div class="valid-feedback">
+                                            Nice.
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 py-5 d-flex justify-content-center align-content-center">
+                                        <div class="col-md-5 mb-3">
+                                          <label for="validationCustom03">Store Logo</label>
+                                          <div class="input-group">
+                                              <div class="input-group-prepend bg-warning">
+                                                <span class="input-group-text bg-warning text-white" id="inputGroupFileAddon01">Logo Pic</span>
+                                              </div>
+                                              <div class="custom-file">
+                                                <input name="store_logo" type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                                                <label class="custom-file-label" for="inputGroupFile01">Choose your logo</label>
+                                              </div>
+                                          </div>
+                                          <div class="invalid-feedback">
+                                            Please provide a Store Logo.
+                                          </div>
+                                          <div class="valid-feedback">
+                                            Nice.
+                                          </div>
+                                        </div>
+
+
+                                        <div class="col-md-5 mb-3">
+                                          <label for="validationCustom03">County</label>
+                                          <select name="country" class="selectpicker form-control">
+                                            <option class="input-options-custom">Nairobi</option>
+                                            <option class="input-options-custom">Kiambu</option>
+                                            <option class="input-options-custom">Nakuru</option>
+                                            <option class="input-options-custom">Nairobi</option>
+                                            <option class="input-options-custom">Kiambu</option>
+                                            <option class="input-options-custom">Nakuru</option>
+                                            <option data-content="<span class='badge badge-success'>Relish</span>">Relish</option>
+                                          </select>
+                                          <div class="invalid-feedback">
+                                            Please provide a Country.
+                                          </div>
+                                          <div class="valid-feedback">
+                                            Nice .
+                                          </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                  <button class="product-button product-button-custom py-3" type="submit">Save</button>
+
+                                </form>
+
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="v-pills-saved" role="tabpanel" aria-labelledby="v-pills-saved-tab">
+                      <div class="col-sm-12 ">
+                        <div class="row py-5">
+                            <h3 class="page-header">Saved Items (3)</h3>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="">
+                                        <div class="product-price d-flex ">
+                                            <span class="normal-price">Ksh <span>17,000</span></span>
+                                            <span class="striked-price  text-muted pl-3 ml-3">Ksh <span>32,000</span></span>
+                                        </div>
+                                    </span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="">
+                                        <div class="product-price d-flex ">
+                                            <span class="normal-price">Ksh <span>17,000</span></span>
+                                            <span class="striked-price  text-muted pl-3 ml-3">Ksh <span>32,000</span></span>
+                                        </div>
+                                    </span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="product-wrapper d-flex w-100">
+                                <div class="product-image col-sm-2">
+                                   <img src="{% static 'img/product3.jpg' %}" alt="">
+                                </div>
+                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
+                                    <span class="">
+                                        <div class="product-price d-flex ">
+                                            <span class="normal-price">Ksh <span>17,000</span></span>
+                                            <span class="striked-price  text-muted pl-3 ml-3">Ksh <span>32,000</span></span>
+                                        </div>
+                                    </span>
+                                    <span class="size1"><a href="#">See Details</a></span>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                      </div>
+                  </div>
+                  <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                      <div class="content-section-user Account">
+                          {% if errors %}
+                            <ul>
+                            {% for error in errors %}
+                              <p class=" alert alert-danger text-white">{{ error }}</p>
+                            {% endfor %}
+                            </ul>
+                          {% endif %}
+
+                          {% if messages %}
+                            <ul class="messages">
+                              {% for message in messages %}
+                              <p class=" alert alert-danger text-white" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                              {% endfor %}
+                            </ul>
+                          {% endif %}
+
+                          {% if form.errors %}
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                              <strong class="text-white">{{ error|escape }}</strong>
+                            </div>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger text-white">
+                              <strong>{{ error|escape }}</strong>
+                            </div>
+                            {% endfor %}
+                          {% endif %}
+
+                        <h2 class=" page-header py-4">Password Reset</h2>
+                            <form class="needs-validation" novalidate action="{% url 'Shoppy:shoppy-buyer-reg' %}" method="POST">
+                                {% csrf_token %}
+                                    <div class="col-sm-12 py-5 d-flex flex-column">
+                                        <div class="col-md-12 mb-3">
+                                          <label for="validationCustom04"> Current Password</label>
+                                          <input type="password" name="password1" class="form-control" id="validationCustom04" placeholder=" Current Password" required>
+                                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                              Your password must be 8-20 characters long, contain letters and numbers.
+                                            </small>
+                                          <div class="invalid-feedback">
+                                            Please provide a valid Password.
+                                          </div>
+                                          <div class="valid-feedback">
+                                            Better looking.
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-12 mb-3">
+                                          <label for="validationCustom05">New Password</label>
+                                          <input name="password2" type="password" class="form-control" id="validationCustom05" placeholder="New Password" required>
+                                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                              Your password must be 8-20 characters long, contain letters and numbers.
+                                            </small>
+                                          <div class="invalid-feedback">
+                                            Please provide a Confirm Password.
+                                          </div>
+                                          <div class="valid-feedback">
+                                            Looks Good.
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-12 mb-3">
+                                          <label for="validationCustom05">Retype Password</label>
+                                          <input name="password2" type="password" class="form-control" id="validationCustom05" placeholder="Retype Your Password" required>
+                                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                              Your password must be 8-20 characters long, contain letters and numbers.
+                                            </small>
+                                          <div class="invalid-feedback">
+                                            Please provide a Confirm Password.
+                                          </div>
+                                          <div class="valid-feedback">
+                                            Looks Good.
+                                          </div>
+                                        </div>
+                                    </div>
+
+                                  <button class="product-button product-button-custom py-3" type="submit">Save</button>
+
+                                </form>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+    </div>
+{% endblock content %}

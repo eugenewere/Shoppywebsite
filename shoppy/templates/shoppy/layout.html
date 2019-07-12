@@ -1,6 +1,5 @@
-{% load static %}
-{% load staticfiles %}
 <!doctype html>
+{% load static %}
 <html lang="en">
   <head>
 
@@ -10,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" type="text/css" href="{% static "css/animation.css" %}">
@@ -181,21 +181,24 @@
 
                     <div class="nav-action account d-flex username-container ml-5 dropdown">
                       <a class="username dropdown-toggle text-white" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span>username</span>
+                        <span>{% if request.user.is_authenticated %}HI {% endif %} {{ request.user.first_name }}</span>
                       </a>
 
-                      <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="dropdownMenuLink">
-                          <a class="btn login-btn dropdown-item" href="#">LogIn</a>
-                          <p class="sign-up-text dropdown-item">Need an account <a class=" text-primary" href="#">Sign-Up</a></p>
-                      </div>
 
-{#                        wen logged in#}
-{#                      <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="dropdownMenuLink">#}
-{#                          <a class="py-2 font-weight-bold dropdown-item" href="#">My account</a>#}
-{#                          <a class="py-2 font-weight-bold dropdown-item" href="#">My Wishlist <span>(10)</span></a>#}
-{#                          <a class="py-2 font-weight-bold dropdown-item" href="#">My Cart <span>(10)</span></a>#}
-{#                          <button class="btn login-btn dropdown-item" href="#">Logout</button>#}
-{#                      </div>#}
+
+                      {% if request.user.is_authenticated %}
+                          <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="dropdownMenuLink">
+                              <a class="py-2 font-weight-bold dropdown-item my-2" href="{% url 'Shoppy:shoppy-user_account' %}">My account</a>
+                              <a class="py-2 font-weight-bold dropdown-item my-2" href="#">My Wishlist <span class="text-black">(10)</span></a>
+                              <a class="py-2 font-weight-bold dropdown-item my-2" href="{% url 'Shoppy:shoppy-cart' %}">My Cart <span class="text-black">(10)</span></a>
+                              <a class="btn login-btn dropdown-item my-2" href="{% url 'Shoppy:shoppy-logout' %}">Logout</a>
+                          </div>
+                          {% else %}
+                          <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="dropdownMenuLink">
+                              <a class="btn login-btn dropdown-item" href="{% url 'Shoppy:shoppy-login' %}">LogIn</a>
+                              <p class="sign-up-text dropdown-item">Need an account <a class=" text-primary" href="{% url 'Shoppy:shoppy-buyer-reg' %}">Sign-Up</a></p>
+                          </div>
+                      {% endif %}
                     </div>
                 </div>
             </div>

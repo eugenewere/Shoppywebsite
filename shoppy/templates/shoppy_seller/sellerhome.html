@@ -1,0 +1,6 @@
+{% extends 'shoppy/layout.html' %}
+
+{% block content %}
+    welcome {{ request.user.username }}
+    <img src="{{ seller.store_logo.url }}" class="img-thumbnail">
+{% endblock %}
