@@ -31,7 +31,7 @@ def productDetails(request):
 
     return render(request, 'shoppy/product_details.html', context)
 
-def user_account(request, instance=):
+def user_account(request):
     user = request.user
     buyer = Buyer.objects.filter(user_ptr_id=user.id).first()
     seller = Seller.objects.filter(user_ptr_id=user.id).first()
@@ -47,8 +47,8 @@ def user_account(request, instance=):
 
     return render(request,'shoppy/user_account.html', {
         'user':logged_in_user,
-        'b_account'= b_account,
-        's_account'= s_account,
+        'b_account': b_account,
+        's_account': s_account,
     })
 
 def cart(request):
