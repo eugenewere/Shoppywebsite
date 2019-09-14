@@ -1,9 +1,12 @@
 {
   "name": "django_project",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^12.3.1",
+    "express": "^4.17.1",
+    "nodemon": "^1.19.1"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,10 +15,11 @@
     "type": "git",
     "url": "git+https://github.com/eugenewere/Shoppywebsite.git"
   },
-  "author": "",
+  "author": "me",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/eugenewere/Shoppywebsite/issues"
   },
-  "homepage": "https://github.com/eugenewere/Shoppywebsite#readme"
+  "homepage": "https://github.com/eugenewere/Shoppywebsite#readme",
+  "description": ""
 }

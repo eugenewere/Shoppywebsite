@@ -17,11 +17,22 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+
 from django_project import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('shoppy/', include('shoppy.urls')),
+    path('shoppyadmin/', include('shoppyadmin.urls')),
+    path('rest_auth/', include('rest_auth.urls')),
+    path('rest_auth/registration/', include('rest_auth.registration.urls')),
+    path('android/', include('androidAuthApi.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
+
+
+
+
+
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,181 @@
+{% extends 'aaa_layout.html' %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
+
+{% endblock links %}
+{% block content %}
+     <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<div class="row">
+			<ol class="breadcrumb">
+				<li>
+					<a href="#">
+					<em class="fa fa-home"></em>
+				    </a>
+			    </li>
+				<li class="active">Product / Carousel</li>
+			</ol>
+		</div><!--/.row-->
+        <div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Carousel</h1>
+			</div>
+		</div><!--/.row-->
+
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-warning-custom">
+                            Add Carousel Image
+                            <ul class="pull-right panel-settings panel-button-tab-right">
+                                <li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <em class="fa fa-cogs"></em>
+                                </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <ul class="dropdown-settings">
+                                                <li><a href="#">
+                                                    <em class="fa fa-cog"></em> Settings 1
+                                                </a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">
+                                                    <em class="fa fa-cog"></em> Settings 2
+                                                </a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">
+                                                    <em class="fa fa-cog"></em> Settings 3
+                                                </a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+                        <div class="panel-body">
+                            <div class="canvas-wrapper">
+                                <div class="main-chart col-sm-12" id="line-chart" height="200" width="600">
+                                    <form action="{% url 'ShoppyAdmin:view_carousel' %}" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="input-group col-sm-12 marginY" >
+                                           <div class="form-group">
+                                                <label class="custom-control" for="email">Description:</label>
+                                                <input placeholder="Brief Description" name="description" type="text" class="form-control" id="email">
+                                           </div>
+                                        </div>
+                                        <div class="input-group col-sm-12 marginY">
+                                           <div class="form-group">
+                                                <label class="custom-control" for="image">Choose A File</label>
+                                                <input name="image"  type="file" class="form-control" id="image" required>
+                                           </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success marginY"><i class="fas fa-plus-circle"></i> Add</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--/.row-->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-warning-custom">
+                        Carousell Images ({% if carousels %} {{ carousels.count }} {% endif %})
+                        <ul class="pull-right panel-settings panel-button-tab-right">
+                            <li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+                                <em class="fa fa-cogs"></em>
+                            </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <ul class="dropdown-settings">
+                                            <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 1
+                                            </a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 2
+                                            </a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 3
+                                            </a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+                    <div class="panel-body">
+                        <div class="canvas-wrapper">
+                            <div class="main-chart col-sm-12" id="line-chart" height="200" width="600">
+                                <table id="example" class="example table table-striped table-bordered" style="width:100%;">
+                                    <thead>
+                                        <tr class="text-capitalize">
+                                            <th>Id</th>
+                                            <th>Carousel</th>
+                                            <th>Description</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for carousel in carousels %}
+                                            <tr class="text-center ">
+                                                <td class="tb-data" width="50">{{ carousel.id }}</td>
+                                                <td class="tb-data carousel-table">
+                                                    <div class="carousel-wrapper">
+                                                        <a href="{{ carousel.image.url }}"><img src="../../..{{ carousel.image.url }}" alt=""></a>
+
+                                                    </div>
+                                                </td>
+                                                <td class="tb-data-desc">
+                                                    <h4  style="text-transform:uppercase">{{ carousel.description }}</h4>
+                                                    <span class="pull-right carousel-date">{{ carousel.created_at }}</span>
+                                                </td>
+                                                <td class="tb-data" width="150">
+                                                    <a href="" class="btn btn-danger" data-toggle="modal" data-target="#{{ carousel.id }}"><i class="fas fa-trash"></i> Delete</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                
+                                    </tbody>
+                                </table>
+
+                            {% for carousel in carousels %}
+                                <div id="{{ carousel.id }}" class="modal fade" tabindex="-1" role="dialog">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Carousel Delete</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        <h3><b>Are you sure you want to delete {{ carousel.name }} ! &hellip;</b></h3>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <a href="{% url 'ShoppyAdmin:carousel-delete' carousel.id %}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+                                      </div>
+                                    </div><!-- /.modal-content -->
+                                  </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--/.row-->
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        } );
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+{% endblock scripts %}

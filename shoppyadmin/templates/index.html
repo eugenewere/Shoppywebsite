@@ -1,0 +1,822 @@
+{% extends 'aaa_layout.html' %}
+{% load static %}
+{% load call_method %}
+{% load humanize %}
+{% block links %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% endblock links %}
+{% block content %}
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<div class="row">
+			<ol class="breadcrumb">
+				<li>
+					<a href="#">
+					<em class="fa fa-home"></em>
+				    </a>
+			    </li>
+				<li class="active">Dashboard</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Dashboard</h1>
+			</div>
+		</div><!--/.row-->
+		
+		<div class="panel panel-container ">
+            <div class="row">
+				<div class=" overflow-hidden col-xs-6 col-md-3 col-lg-3 p-5 m-2  ">
+					<div class=" panel-before-custom-a panel dash-panel panel-teal py-3 panel-widget  bg-blue">
+                            <div class="panel-before-custom">
+                                <em class="fas fa-xl fa-user color-white"></em>
+                            </div>
+                            <div style="margin-left: 120px" class="  row no-padding"><em class="fas fa-xl fa-user color-white"></em>
+
+                                {% if buyers %}
+                                   <div class="large">{{ buyers.count }}</div>
+                                {% else %}
+                                   <div class="large">0</div>
+                                {% endif %}
+                                <div class="text-muted color-white size4 paddingy2">Buyers</div>
+                            </div>
+					</div>
+				</div>
+				<div class=" overflow-hidden  col-xs-6 col-md-3 col-lg-3 p-5 m-2 ">
+					<div class=" panel-before-custom-a panel dash-panel py-3 panel-blue panel-widget  bg-pink">
+                        <div class="panel-before-custom">
+                                <em class="fa fa-xl fa-shopping-cart color-white"></em>
+                        </div>
+						<div style="margin-left: 120px" class=" row no-padding"><em class="fa fa-xl fa-shopping-cart color-white"></em>
+
+							{% if orders %}
+							  <div class="large">{{orders.count }}</div>
+                            {% else %}
+                            <div class="large">0</div>
+                            {% endif %}
+							<div class="text-muted color-white size4 paddingy2">Orders</div>
+						</div>
+					</div>
+				</div>
+				<div class=" overflow-hidden col-xs-6 col-md-3 col-lg-3 p-5 m-2">
+					<div class="panel-before-custom-a panel dash-panel py-3 panel-orange panel-widget bg-orange-shoppy">
+                         <div class="panel-before-custom">
+                                <em class="fas fa-xl fa-money-bill-alt color-white"></em>
+                         </div>
+						<div style="margin-left: 120px" class=" row no-padding"><em class="fas fa-xl fa-money-bill-alt color-white"></em>
+
+							{% if Sales %}
+							  <div class="large">{{ sales.count }}</div>
+                            {% else %}
+                            <div class="large">0</div>
+                            {% endif %}
+							<div class="text-muted color-white size4 paddingy2">Sales</div>
+						</div>
+					</div>
+				</div>
+				<div class=" overflow-hidden col-xs-6 col-md-3 col-lg-3 p-5 m-2 ">
+					<div class="panel-before-custom-a panel dash-panel py-3 panel-red panel-widget bg-green">
+                        <div class="panel-before-custom">
+                            <em class="fas fa-xl fa-capsules color-white"></em>
+                        </div>
+						<div style="margin-left: 120px" class=" row no-padding"><em class="fas fa-xl fa-capsules color-white"></em>
+                            {% if products %}
+							  <div class="large">{{ products.count }}</div>
+                            {% else %}
+                            <div class="large">0</div>
+                            {% endif %}
+							<div class="text-muted color-white size4 paddingy2">Products</div>
+						</div>
+					</div>
+				</div>
+            </div>
+		</div>
+{#        barchart#}
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-warning-custom">
+                        Orders Chart Bars
+
+                        <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+                    <div class="panel-body">
+                        <div class="canvas-wrapper ">
+                            <canvas class="main-chart" id="orderschart" height="200" width="600"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if not request.user|is_seller %}
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-warning-custom">
+                            Users Chart
+                            <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+                        <div class="panel-body">
+                            <div class="canvas-wrapper">
+                                <canvas class="main-chart" id="users" height="200" width="600"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             {% else %}
+                <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-warning-custom">
+                        Orders Chart line
+
+                        <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+                    <div class="panel-body">
+                        <div class="canvas-wrapper ">
+                            <canvas class="main-chart" id="orderschartline" height="200" width="600"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div><!--/.row-->
+        <div class="row">
+            <div class="col-md-12">
+				<div class="panel panel-default chat">
+					<div class="panel-heading  panel-warning-custom">
+						Orders
+						<ul class="pull-right panel-settings panel-button-tab-right">
+							<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+								<em class="fa fa-cogs"></em>
+							</a>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li>
+										<ul class="dropdown-settings">
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 1
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 2
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 3
+											</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+					<div class="panel-body ">
+                    {% if  orders %}
+                        <div class="main-chart" id="line-chart" height="200" width="400">
+                           <table id="" class="example table table-striped table-bordered" style="">
+                            <thead>
+                                <tr class="text-capitalize">
+                                    <th>Id</th>
+                                    <th>Image</th>
+                                    <th>Product</th>
+                                    <th>Buyer</th>
+                                    <th>Phone Number</th>
+                                    <th>Revenue</th>
+                                    <th>Created At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                    <tr class="text-center ">
+                                        <td class="tb-data">{{ forloop.counter }}</td>
+                                        <td class="tb-data tb-data" style="width: 110px;">
+                                            <div class="product-image">
+                                               <img src="{{ order.product.featured_url.url }}" alt="">
+                                            </div>
+                                        </td>
+                                        <td class="tb-data text-capitalize">{{ order.product.name|truncatechars:19 }}</td>
+                                        <td class="tb-data text-capitalize">{{ order.buyer.first_name }}</td>
+                                        <td class="tb-data text-capitalize">{{ order.buyer.phone_number }}</td>
+                                        <td class="tb-data text-capitalize">{{ order.total }}</td>
+                                        <td class="tb-data">{{ order.created_at|date:'d,m-Y' }}</td>
+                                        <td class="tb-data">
+                                            <a href="" class="btn btn-brown">Undelivered</a>
+                                            <a href="" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                        </div>
+                    {% else %}
+                        <div class="row mt-2 d-flex justify-content-center align-content-center align-items-center">
+                             <div class="col-sm-3" style="height: 500px; width: 474px; border: none;margin: 20px; overflow: hidden; text-align: center;">
+                                 <h1>No Orders For You</h1>
+                                 <img class="img-fluid w-100 h-100" src="{% static 'img/no wishlist image/nowishlist.png' %}" alt="">
+                             </div>
+                        </div>
+                    {% endif %}
+					</div>
+					<div class="panel-footer">
+
+					</div>
+				</div>
+			</div><!--/.col-->
+        </div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default ">
+					<div class="panel-heading panel-warning-custom">
+						Products
+						<ul class="pull-right panel-settings panel-button-tab-right">
+							<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+								<em class="fa fa-cogs"></em>
+							</a>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li>
+										<ul class="dropdown-settings">
+											<li><a href="#" data-toggle="modal" data-target="#myModal">
+												<em class="fas fa-plus"></em> Add Products
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fas fa-eye"></em> View Products
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Featured Products
+											</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
+
+                        <!-- Modal -->
+                          <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">Add Products</h4>
+                                </div>
+                                <div class="modal-body">
+
+                                  <fieldset>
+                                      <form method="POST" action="{% url 'ShoppyAdmin:shoppy-admin-home' %}" enctype="multipart/form-data">
+                                          {% csrf_token %}
+                                          <div class="form-group has-feedback">
+                                              <label class="control-label" for="name">Product Name</label>
+                                              <input type="text" name="name" class="form-control has-success" id="name" aria-describedby="name" placeholder="Product Name">
+                                          </div>
+                                          <div class="form-group has-feedback img-file">
+                                              <label class="control-label" for="username">Main Image</label>
+                                              <input  type="file"  name="featured_url" class="form-control" name="product_image" accept=".png, .jpeg, .jpg" aria-describedby="usernameStatus" placeholder="Main Image">
+                                          </div>
+                                          <div class="form-group has-feedback  col-sm-12">
+                                              <label class="control-label" for="sel1">Select Brand</label> <br>
+                                              <select name="product_brand" id="sel1" class="selectpicker" data-show-subtext="true" data-live-search="true">
+                                                {% for brand in brands %}
+                                                  <option id="sel1" data-subtext="{{ brand.name }}" value="{{ brand.id }}">{{ brand.name }}</option>
+                                                {% endfor %}
+                                              </select>
+                                          </div>
+                                          <div class="form-group has-feedback img-file">
+                                              <label class="control-label" for="username">Other Image</label>
+                                              <input placeholder="other_images" type="file" id="other_images" multiple name="other_images[]" class="form-control">
+                                          </div>
+                                          <div class="form-group has-feedback  col-sm-12">
+                                              <label for="sel2">Select Seller</label> <br>
+                                              <select name="seller" class="selectpicker" id="sel2" data-show-subtext="true" data-live-search="true">
+                                                {% for seller in seller %}
+                                                <option id="sel2" data-subtext="{{ seller.country }}" value="{{ seller.id }}">{{ seller.first_name }} {{ seller.last_name }}-({{ seller.business_no }})</option>
+                                                {% endfor %}
+                                              </select>
+                                          </div>
+                                          <div class="form-group has-feedback">
+                                              <label class="control-label" for="name">Product Price</label>
+                                              <input type="number" name="unit_cost" class="form-control has-success" id="name" aria-describedby="name" placeholder="Product Price">
+                                          </div>
+                                          <div class="form-group has-feedback">
+                                              <label class="control-label" for="username2">Short Description</label>
+                                              <input type="text" class="form-control" name="short_description" id="name" aria-describedby="usernameStatus" placeholder="Short Description">
+                                          </div>
+                                          <div class="form-group has-feedback">
+                                              <label class="control-label" for="username2">Long Description</label>
+                                              <textarea id="username" style="resize: none;" name="long_description" class="form-control " cols="30" rows="10"  ></textarea>
+                                          </div>
+                                          <div class="col-sm-12 d-flex">
+                                              <div class="custom-control custom-radio" style="margin-right: 20px">
+                                                  <input type="radio" class="custom-control-input" id="defaultUnchecked" name="status" value="NORMAL" checked>
+                                                  <label class=" control-label custom-control-label" for="defaultUnchecked">Normal</label>
+                                              </div>
+
+                                                <!-- Default checked -->
+                                              <div class="custom-control custom-radio">
+                                                  <input type="radio" class="custom-control-input" id="defaultChecked" name="status" value="FEATURED">
+                                                  <label class=" control-label custom-control-label" for="defaultChecked">Featured</label>
+                                              </div>
+                                          </div>
+                                          <div class="col-sm-12">
+                                              <button type="submit" class="btn btn-lg btn-success">Add</button>
+                                              <button type="reset" class="btn btn-lg btn-danger">Reset</button>
+                                          </div>
+
+                                      </form>
+                                  </fieldset>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                    </div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<div class="main-chart" id="line-chart" height="200" width="400">
+                                <table id="example" class="table table-striped table-bordered" style="">
+                                    <thead >
+
+                                        <tr class="text-capitalize">
+                                            <th>Id</th>
+                                            <th>Picture</th>
+                                            <th>Name</th>
+                                            <th>Brand</th>
+                                            <th>Price(Kshs)</th>
+                                            <th>Status</th>
+                                            <th>Seller</th>
+                                            <th>Created At</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in products %}
+                                        <tr class="text-center ">
+                                            <td class="tb-data">{{ forloop.counter }}</td>
+                                            <td class="tb-data tb-data" style="width: 110px; position: relative">
+                                                <div class="product-image">
+                                                   <img src="{{ product.featured_url.url }}" alt="">
+                                                </div>
+                                                {% if product.id|product_on_offer %}
+                                                    {% for offer in product.id|product_on_offer %}
+                                                        <span class="badge-custom-admin">
+                                                            Save {{ offer.discount }}%
+                                                        </span>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </td>
+                                            <td style="width: 299px;" class="product-details">{{ product.name }}</td>
+                                            <td class="tb-data">{{ product.product_brand }}</td>
+                                            <td class="tb-data">
+                                                {% if  product.price_after_offer and product.id|product_on_offer %}
+                                                    <div style="display: flex;flex-direction: column;">
+                                                        <span> {{ product.price_after_offer|floatformat:1|intcomma }}Kshs</span>
+                                                        <span class="striked-price">{{ product.unit_cost|floatformat:1|intcomma }} Kshs</span>
+                                                    </div>
+                                                {% else %}
+                                                    <span> {{ product.unit_cost|floatformat:1|intcomma }}Kshs</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="tb-data">{{ product.status }}</td>
+                                            <td class="tb-data">{{ product.seller }}</td>
+                                            <td class="tb-data">{{ product.created_at }}</td>
+
+                                            <td class="text-center tb-data">
+                                                <a href="{% url 'ShoppyAdmin:shoppy_admin_edit_product' product.id %}" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->
+		
+
+		
+		<div class="row">
+            <div class="col-md-6">
+				<div class="panel panel-primary ">
+					<div class="panel-heading  panel-warning-custom">
+						Categories
+						<ul class="pull-right panel-settings panel-button-tab-right">
+							<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+								<em class="fa fa-cogs"></em>
+							</a>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li>
+										<ul class="dropdown-settings">
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 1
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 2
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 3
+											</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+
+					<div class="panel-body timeline-container">
+						<table id="" class="example table table-striped table-bordered" style="width:100%;">
+                            <thead>
+                                <tr class="text-capitalize">
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Created At</th>
+                                    {% if not request.user|is_seller %}
+                                    <th>Action</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for category in categories %}
+                                    <tr class="text-center ">
+                                        <td class="tb-data">{{ forloop.counter }}</td>
+                                        <td class="tb-data">{{ category.name }}</td>
+                                        <td class="tb-data">{{ category.created_at }}</td>
+                                        {% if not request.user|is_seller %}
+                                        <td class="tb-data">
+
+                                            <a href="{% url 'ShoppyAdmin:shoppy_admin_add_category' %}" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                        </td>
+                                    {% endif %}
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+					</div>
+				</div>
+			</div><!--/.col-->
+
+
+			<div class="col-md-6">
+				<div class="panel panel-default chat">
+					<div class="panel-heading  panel-warning-custom">
+						Brands
+{#                        <a href="{% url 'ShoppyAdmin:shoppy_admin_add_brand' %}" class="btn btn-success"><i class="fas fa-pencil-alt"></i> View All</a>#}
+						<ul class="pull-right panel-settings panel-button-tab-right">
+							<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+								<em class="fa fa-cogs"></em>
+							</a>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li>
+										<ul class="dropdown-settings">
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 1
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 2
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 3
+											</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+
+					<div class="panel-body">
+                        <table id="" class="example table table-striped table-bordered" style="width:100%;">
+                            <thead>
+                                <tr class="text-capitalize">
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Created At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for brand in brands %}
+                                    <tr class="text-center ">
+                                        <td class="tb-data">{{ forloop.counter }}</td>
+                                        <td class="tb-data">{{ brand.name }}</td>
+                                        <td class="tb-data">{{ brand.created_at }}</td>
+                                        <td class="tb-data">
+                                            <a href="{% url 'ShoppyAdmin:shoppy_admin_add_brand' %}" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+					</div>
+					<div class="panel-footer">
+
+					</div>
+				</div>
+			</div><!--/.col-->
+
+
+            {% if not request.user|is_seller %}
+            <div class="col-md-12">
+                <div class="panel panel-default">
+					<div class="panel-heading  panel-warning-custom">
+						Sellers
+						<ul class="pull-right panel-settings panel-button-tab-right">
+							<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+								<em class="fa fa-cogs"></em>
+							</a>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li>
+										<ul class="dropdown-settings">
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 1
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 2
+											</a></li>
+											<li class="divider"></li>
+											<li><a href="#">
+												<em class="fa fa-cog"></em> Settings 3
+											</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+					<div class="panel-body">
+                        <table id="" class="example table table-striped table-bordered" style="width:100%;">
+                            <thead>
+                                <tr class="text-capitalize">
+                                    <th>Id</th>
+                                    <th>Store Logo</th>
+                                    <th>Name</th>
+                                    <th>Usename</th>
+                                    <th>Phone Number</th>
+                                    <th>Date Joined</th>
+                                    <th>Status</th>
+                                    <th>Store Name</th>
+                                    <th>County</th>
+                                    <th>Business No</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for seller in seller %}
+                                    <tr class="text-center ">
+                                        <td class="tb-data">{{ forloop.counter }}</td>
+                                        <td class="tb-data seller-logo-wrapper">
+                                            <img src="{{ seller.store_logo.url }}" alt="">
+                                        </td>
+                                        <td class="tb-data">{{ seller.first_name }} {{ seller.last_name }}</td>
+                                        {% if seller.username %}
+                                          <td class="tb-data">{{ seller.username }}</td>
+                                        {% else %}
+                                           <td class="tb-data">{{ seller.email }}</td>
+                                        {% endif %}
+                                        <td class="tb-data">{{ seller.phone_number }}</td>
+                                        <td class="tb-data">{{ seller.date_joined }}</td>
+                                        <td class="tb-data">{{ seller.status }}</td>
+                                        <td class="tb-data">{{ seller.store_name }}</td>
+                                        <td class="tb-data">{{ seller.country }}</td>
+                                        <td class="tb-data">{{ seller.business_no }}</td>
+                                        <td class="tb-data">
+                                            <a href="" class="btn btn-info"><i class="fas fa-eye"></i> View</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+					</div>
+					<div class="panel-footer">
+
+					</div>
+				</div>
+            </div>
+            {% endif %}
+
+		</div><!--/.row-->
+	</div>	<!--/.main-->
+	
+{% endblock %}
+{% block scripts %}
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#ckeditor' ) )
+            .catch( error => {
+                console.error( error );
+        } );
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        } );
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.example').DataTable();
+        } );
+    </script>
+    <script>
+        $(function() {
+          $('.selectpicker').selectpicker();
+        });
+    </script>
+
+    <script >
+        var endpoint = '{% url 'ShoppyAdmin:users_chart' %}';
+        var defaultData =  [];
+        var labels = [];
+        $.ajax({
+            method: "GET",
+            url : endpoint,
+            success : function (data) {
+                labels = data.labels;
+                defaultData= data.defaultData;
+                setUsersChart()
+                // console.log(data);
+            },
+            error : function (error_data) {
+                console.log(error);
+                console.log(error_data);
+            },
+        });
+
+        function setUsersChart(){
+            var ctx = document.getElementById('users').getContext('2d');
+            var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Orders',
+                    data: defaultData,
+                    backgroundColor: [
+                        'rgba(255,0,8,0.41)',
+                        'rgba(186,0,192,0.54)',
+
+                    ],
+                    borderColor: [
+                        'rgb(255,219,0)',
+                        'rgb(212,0,235)',
+
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        }
+
+        var endpoint2 = '{% url 'ShoppyAdmin:orders_chart' %}';
+        var defaultData2 =  [];
+        var labels2 = [];
+        $.ajax({
+            method: "GET",
+            url : endpoint2,
+            success : function (data) {
+                labels2 = data.labels2;
+                defaultData2= data.defaultData2;
+                setOrderChart();
+                setOrderChartline();
+                // console.log(data);
+            },
+            error : function (error_data) {
+                console.log(error);
+                console.log(error_data);
+            },
+        });
+
+        function setOrderChart() {
+            var ctx = document.getElementById('orderschart').getContext('2d');
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels2,
+                datasets: [{
+                    label: 'Orders',
+                    data: defaultData2,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgb(129,255,46)',
+                        'rgb(255,217,66)',
+                        'rgb(255,131,255)',
+                        'rgb(1,53,255)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(36,255,221)',
+                        'rgb(145,255,39)',
+
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgb(129,255,46)',
+                        'rgb(255,217,66)',
+                        'rgb(255,131,255)',
+                        'rgb(1,53,255)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(36,255,221)',
+                        'rgb(145,255,39)',
+
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        }
+
+
+
+        function setOrderChartline() {
+            var ctx = document.getElementById('orderschartline').getContext('2d');
+            var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels2,
+                datasets: [{
+                    label: 'Orders',
+                    data: defaultData2,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgb(129,255,46)',
+                        'rgb(255,217,66)',
+                        'rgb(255,131,255)',
+                        'rgb(1,53,255)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(36,255,221)',
+                        'rgb(145,255,39)',
+
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgb(129,255,46)',
+                        'rgb(255,217,66)',
+                        'rgb(255,131,255)',
+                        'rgb(1,53,255)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(36,255,221)',
+                        'rgb(145,255,39)',
+
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        }
+
+    </script>
+
+{#    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>#}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+
+{% endblock scripts %}

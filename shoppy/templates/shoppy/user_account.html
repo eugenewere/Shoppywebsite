@@ -1,6 +1,7 @@
 
 {% extends 'shoppy/layout.html' %}
 {% load static %}
+{% load call_method %}
 {% block content %}
 
     <div class="user_account mb-6">
@@ -11,14 +12,15 @@
         <div class="col-sm-12 py-4 ">
           <div class="d-flex justify-content-center align-content-center">
               <div class="col-2 side-l-panel">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                  <a class="nav-link side-menu-btn active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><i class="fas fa-people-carry"></i> My Orders (10)</a>
-                  <a class="nav-link side-menu-btn" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false"><i class="fas fa-info-circle"></i> Details</a>
-                  <a class="nav-link side-menu-btn" id="v-pills-saved-tab" data-toggle="pill" href="#v-pills-saved" role="tab" aria-controls="v-pills-saved" aria-selected="false"><i class="far fa-heart"></i> Saved (8)</a>
-                  <a class="nav-link side-menu-btn" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-key"></i> Change Password</a>
-                  <a class="nav-link product-button product-button-custom text-white" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">LogOut</a>
+                <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                      <a class="nav-link side-menu-btn active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><i class="fas fa-people-carry"></i> My Orders (10)</a>
+                      <a class="nav-link side-menu-btn" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false"><i class="fas fa-info-circle"></i> Edit Account Details</a>
+                      <a class="nav-link side-menu-btn" id="v-pills-saved-tab" data-toggle="pill" href="#v-pills-saved" role="tab" aria-controls="v-pills-saved" aria-selected="false"><i class="far fa-heart"></i> Saved ({{ wishlist.count }})</a>
+                      <a class="nav-link side-menu-btn" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-key"></i> Change Password</a>
+                      <a class="nav-link product-button product-button-custom text-white"  href="{% url 'Shoppy:shoppy-logout' %}">LogOut</a>
                 </div>
               </div>
+{#          orders#}
               <div class="col-9 side-r-panel">
                 <div class="tab-content" id="v-pills-tabContent">
                   <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
@@ -128,38 +130,38 @@
                   <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                       <div class="content-section-user Account">
                           {% if errors %}
-                            <ul>
-                            {% for error in errors %}
-                              <p class=" alert alert-danger text-white">{{ error }}</p>
-                            {% endfor %}
-                            </ul>
+                            <div class="alert alert-danger text-white" role="alert">
+                                {% for error in errors %}
+                                  <p class="text-white">{{ error }}</p>
+                                {% endfor %}
+                            </div>
                           {% endif %}
 
                           {% if messages %}
-                            <ul class="messages">
+                            <div class="messages alert alert-danger text-white" role="alert">
                               {% for message in messages %}
-                              <p class=" alert alert-danger text-white" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                                <p class="text-white " {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
                               {% endfor %}
-                            </ul>
+                            </div>
                           {% endif %}
 
                           {% if form.errors %}
                             {% for field in form %}
-                            {% for error in field.errors %}
-                            <div class="alert alert-danger">
-                              <strong class="text-white">{{ error|escape }}</strong>
-                            </div>
-                            {% endfor %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger" role="alert">
+                                      <strong class="text-white">{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
                             {% endfor %}
                             {% for error in form.non_field_errors %}
-                            <div class="alert alert-danger text-white">
-                              <strong>{{ error|escape }}</strong>
-                            </div>
+                                <div class="alert alert-danger text-white" role="alert">
+                                  <strong>{{ error|escape }}</strong>
+                                </div>
                             {% endfor %}
                           {% endif %}
 
                         <h2 class=" page-header py-4">User Account Details</h2>
-                            <form class="needs-validation" novalidate action="{% url 'Shoppy:shoppy-buyer-reg' %}" method="POST">
+                            <form class="needs-validation" novalidate action="{% url 'Shoppy:shoppy-user_account' %}" method="POST">
                                 {% csrf_token %}
 
                                     <div class="col-md-12 row py-5 d-flex justify-content-center align-content-center">
@@ -292,81 +294,53 @@
                   <div class="tab-pane fade" id="v-pills-saved" role="tabpanel" aria-labelledby="v-pills-saved-tab">
                       <div class="col-sm-12 ">
                         <div class="row py-5">
-                            <h3 class="page-header">Saved Items (3)</h3>
+                            <h3 class="page-header">Saved Items ({{ wishlist.count }})</h3>
+                            {% if wishlist %}
+                            <a href="{% url 'Shoppy:remove_all_from_wishlist' %}" class="product-button pull-right color-orange-shoppy size4 superfont"><i class="fa fa-trash-alt"> Delete All</i></a>
+                            {% endif %}
                         </div>
-
-                        <div class="row mt-2">
-                             <div class="product-wrapper d-flex w-100">
-                                <div class="product-image col-sm-2">
-                                   <img src="{% static 'img/product3.jpg' %}" alt="">
-                                </div>
-                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
-                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
-                                    <span class="">
-                                        <div class="product-price d-flex ">
-                                            <span class="normal-price">Ksh <span>17,000</span></span>
-                                            <span class="striked-price  text-muted pl-3 ml-3">Ksh <span>32,000</span></span>
+                            {% if wishlist %}
+                            {% for wishlist in wishlist %}
+                                <div class="row mt-2">
+                                     <div class="product-wrapper d-flex w-100">
+                                        <div class="product-image col-sm-2">
+                                           <img src="{{ wishlist.product.featured_url.url }}" alt="">
                                         </div>
-                                    </span>
-                                    <span class="size1"><a href="#">See Details</a></span>
-                                </div>
-                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
-                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
+                                            <h3 class="cart-prod-name-text text-capitalize">{{ wishlist.product.name }}</h3>
+                                            <span class="">
+                                                <div class="product-price d-flex ">
+                                                    <span class="normal-price">Ksh <span>{{ wishlist.product.unit_cost }}</span></span>
+                                                    <span class="striked-price  text-muted pl-3 ml-3">Ksh <span>32,000</span></span>
+                                                </div>
+                                            </span>
 
-                        <div class="row mt-2">
-                             <div class="product-wrapper d-flex w-100">
-                                <div class="product-image col-sm-2">
-                                   <img src="{% static 'img/product3.jpg' %}" alt="">
-                                </div>
-                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
-                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
-                                    <span class="">
-                                        <div class="product-price d-flex ">
-                                            <span class="normal-price">Ksh <span>17,000</span></span>
-                                            <span class="striked-price  text-muted pl-3 ml-3">Ksh <span>32,000</span></span>
+                                             <span class="size1"><a href="">See Details</a></span>
                                         </div>
-                                    </span>
-                                    <span class="size1"><a href="#">See Details</a></span>
-                                </div>
-                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
-                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mt-2">
-                             <div class="product-wrapper d-flex w-100">
-                                <div class="product-image col-sm-2">
-                                   <img src="{% static 'img/product3.jpg' %}" alt="">
-                                </div>
-                                <div class="product-details-s col-sm-8 d-flex flex-column justify-content-between">
-                                    <h3 class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</h3>
-                                    <span class="">
-                                        <div class="product-price d-flex ">
-                                            <span class="normal-price">Ksh <span>17,000</span></span>
-                                            <span class="striked-price  text-muted pl-3 ml-3">Ksh <span>32,000</span></span>
+                                        <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
+                                            <a href="{% url 'Shoppy:remove_from_wishlist' wishlist.id request.path|make_safe  %}" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
                                         </div>
-                                    </span>
-                                    <span class="size1"><a href="#">See Details</a></span>
+                                    </div>
                                 </div>
-                                <div class="col-sm-2 d-flex align-items-center align-content-center justify-content-center">
-                                    <a href="" class="color-orange-shoppy size4 "><i class="fas fa-trash mr-2"></i> Delete</a>
-                                </div>
-                            </div>
-                        </div>
-
-
+                          {% endfor %}
+                          {% else %}
+                                <div class="row mt-2 d-flex justify-content-center align-content-center align-items-center">
+                                     <div class="col-sm-3" style="width: 200px; border: none;margin: 20px; overflow: hidden;">
+                                         <h1>No Wishes For You</h1>
+                                         <img class="img-fluid w-100 h-100" src="{% static 'img/no wishlist image/nowishlist.png' %}" alt="">
+                                     </div>
+                                </div> 
+                          {% endif %}
                       </div>
                   </div>
                   <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                       <div class="content-section-user Account">
                           {% if errors %}
-                            <ul>
+                            <ul class="p-0">
                             {% for error in errors %}
-                              <p class=" alert alert-danger text-white">{{ error }}</p>
+                                <div class="alert alert-danger" role="alert">
+                                  {{ error }}
+                                </div>
                             {% endfor %}
                             </ul>
                           {% endif %}
@@ -374,76 +348,76 @@
                           {% if messages %}
                             <ul class="messages">
                               {% for message in messages %}
-                              <p class=" alert alert-danger text-white" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                                  <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+                                      {{ message }}
+                                  </div>
                               {% endfor %}
                             </ul>
                           {% endif %}
 
                           {% if form.errors %}
                             {% for field in form %}
-                            {% for error in field.errors %}
-                            <div class="alert alert-danger">
-                              <strong class="text-white">{{ error|escape }}</strong>
-                            </div>
-                            {% endfor %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                      <strong class="text-white">{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
                             {% endfor %}
                             {% for error in form.non_field_errors %}
-                            <div class="alert alert-danger text-white">
-                              <strong>{{ error|escape }}</strong>
-                            </div>
+                                <div class="alert alert-danger text-white">
+                                  <strong>{{ error|escape }}</strong>
+                                </div>
                             {% endfor %}
                           {% endif %}
 
                         <h2 class=" page-header py-4">Password Reset</h2>
-                            <form class="needs-validation" novalidate action="{% url 'Shoppy:shoppy-buyer-reg' %}" method="POST">
+                            <form class="needs-validation" novalidate action="{% url 'Shoppy:change_password' %}" method="POST">
                                 {% csrf_token %}
-                                    <div class="col-sm-12 py-5 d-flex flex-column">
-                                        <div class="col-md-12 mb-3">
-                                          <label for="validationCustom04"> Current Password</label>
-                                          <input type="password" name="password1" class="form-control" id="validationCustom04" placeholder=" Current Password" required>
-                                            <small id="passwordHelpBlock" class="form-text text-muted">
-                                              Your password must be 8-20 characters long, contain letters and numbers.
-                                            </small>
-                                          <div class="invalid-feedback">
-                                            Please provide a valid Password.
-                                          </div>
-                                          <div class="valid-feedback">
-                                            Better looking.
-                                          </div>
-                                        </div>
-
-                                        <div class="col-md-12 mb-3">
-                                          <label for="validationCustom05">New Password</label>
-                                          <input name="password2" type="password" class="form-control" id="validationCustom05" placeholder="New Password" required>
-                                            <small id="passwordHelpBlock" class="form-text text-muted">
-                                              Your password must be 8-20 characters long, contain letters and numbers.
-                                            </small>
-                                          <div class="invalid-feedback">
-                                            Please provide a Confirm Password.
-                                          </div>
-                                          <div class="valid-feedback">
-                                            Looks Good.
-                                          </div>
-                                        </div>
-
-                                        <div class="col-md-12 mb-3">
-                                          <label for="validationCustom05">Retype Password</label>
-                                          <input name="password2" type="password" class="form-control" id="validationCustom05" placeholder="Retype Your Password" required>
-                                            <small id="passwordHelpBlock" class="form-text text-muted">
-                                              Your password must be 8-20 characters long, contain letters and numbers.
-                                            </small>
-                                          <div class="invalid-feedback">
-                                            Please provide a Confirm Password.
-                                          </div>
-                                          <div class="valid-feedback">
-                                            Looks Good.
-                                          </div>
-                                        </div>
+                                <div class="col-sm-12 py-5 d-flex flex-column">
+                                    <div class="col-md-12 mb-3">
+                                      <label for="validationCustom04"> Current Password</label>
+                                      <input type="password" name="old_password" class="form-control" id="validationCustom04" placeholder=" Current Password" required>
+                                        <small id="passwordHelpBlock" class="form-text text-muted">
+                                          Your password must be 8-20 characters long, contain letters and numbers.
+                                        </small>
+                                      <div class="invalid-feedback">
+                                        Please provide a valid Password.
+                                      </div>
+                                      <div class="valid-feedback">
+                                        Better looking.
+                                      </div>
                                     </div>
 
-                                  <button class="product-button product-button-custom py-3" type="submit">Save</button>
+                                    <div class="col-md-12 mb-3">
+                                      <label for="validationCustom05">New Password</label>
+                                      <input name="new_password1" type="password" class="form-control" id="validationCustom05" placeholder="New Password" required>
+                                        <small id="passwordHelpBlock" class="form-text text-muted">
+                                          Your password must be 8-20 characters long, contain letters and numbers.
+                                        </small>
+                                      <div class="invalid-feedback">
+                                        Please provide a Confirm Password.
+                                      </div>
+                                      <div class="valid-feedback">
+                                        Looks Good.
+                                      </div>
+                                    </div>
 
-                                </form>
+                                    <div class="col-md-12 mb-3">
+                                      <label for="validationCustom05">Retype Password</label>
+                                      <input name="new_password2" type="password" class="form-control" id="validationCustom05" placeholder="Retype Your Password" required>
+                                        <small id="passwordHelpBlock" class="form-text text-muted">
+                                          Your password must be 8-20 characters long, contain letters and numbers.
+                                        </small>
+                                      <div class="invalid-feedback">
+                                        Please provide a Confirm Password.
+                                      </div>
+                                      <div class="valid-feedback">
+                                        Looks Good.
+                                      </div>
+                                    </div>
+                                </div>
+                                <button class="product-button product-button-custom py-3" type="submit">Save</button>
+                            </form>
 
                     </div>
                   </div>

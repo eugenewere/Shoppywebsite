@@ -1,0 +1,119 @@
+:root{
+    --bluishwhitetheme:#F3F7FC;
+    --orangetheme:#FD9046;
+    --darkorangetheme: #994d33;
+    --whitebgcolor:#f2f2f2;
+    --blacktexttheme:black;
+    --greytheme: #898989;
+    --whitetexttheme: #ffffff;
+    --whiteicontheme:#F3F7FC;
+    --secnaviconsize:32px;
+    --secnaviconfontsize:15px;
+    --secnavusernamefontsize:24px;
+    --box-shadow: 6px 6px 12px #858585;
+    --box-shadowA: 8px 8px 15px #727272;
+    --superfont: 'Oswald',sans-serif;
+    --categoryfontweight7:700;
+    --categoryfontweight6:600;
+    --textfontsize:23px;
+    --textfontsize1:18px;
+    --feauredproductpillcolor:red;
+    --producttitlefont:'Oswald',sans-serif;
+    --productborderradius:10px;
+    --cardtextfontfamily: 'Montserrat', sans-serif;
+    --footerfontfamily: 'Oswald',sans-serif;
+    --blackbackgroundtheme:black;
+}
+
+#exampleSlider {
+  position: relative;
+  width: 90%;
+  height: 650px;
+  margin: 0 auto;
+}
+@media (max-width: 767px) {
+  #exampleSlider {
+    border-color: transparent;
+  }
+}
+#exampleSlider .MS-content {
+  margin: 15px 5%;
+  overflow: hidden;
+  white-space: nowrap;
+
+  height: 650px;
+}
+@media (max-width: 767px) {
+  #exampleSlider .MS-content {
+    margin: 0;
+  }
+}
+#exampleSlider .MS-content .item {
+  display: inline-block;
+  overflow: hidden;
+  width: 334px;
+  height: 550px;
+  margin-right: 60px;
+  position: relative;
+  vertical-align: top;
+  border-right: none;
+  ;
+
+}
+.item .product-card-wrapper{
+  width: 334px;
+
+}
+@media (max-width: 1200px) {
+  #exampleSlider .MS-content .item {
+   width: 334px;
+  }
+}
+@media (max-width: 992px) {
+  #exampleSlider .MS-content .item {
+    width: 334px;
+  }
+}
+@media (max-width: 767px) {
+  #exampleSlider .MS-content .item {
+    width: 334px;
+  }
+}
+
+#exampleSlider .MS-controls button {
+  position: absolute;
+  border: none;
+  background: transparent;
+  font-size: 30px;
+  outline: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#exampleSlider .MS-controls button i{
+  color: var(--orangetheme);
+  font-size: 24px;
+}
+@media (max-width: 767px) {
+  #exampleSlider .MS-controls button {
+    display: none;
+  }
+}
+#exampleSlider .MS-controls button:hover {
+  cursor: pointer;
+}
+#exampleSlider .MS-controls .MS-left {
+  left: 10px;
+}
+@media (max-width: 992px) {
+  #exampleSlider .MS-controls .MS-left {
+    left: -2px;
+  }
+}
+#exampleSlider .MS-controls .MS-right {
+  right: 10px;
+}
+@media (max-width: 992px) {
+  #exampleSlider .MS-controls .MS-right {
+    right: -2px;
+  }
+}

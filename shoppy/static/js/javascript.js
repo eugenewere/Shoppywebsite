@@ -1,21 +1,21 @@
 // formvalidation
-        (function() {
-          'use strict';
-          window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-              form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-              }, false);
-            });
-          }, false);
-        })();
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
 // endofformvalidation
 
 // categorydrpdown
@@ -31,16 +31,16 @@ $(document).ready(function(){
 
 // accordion
 $(document).ready(function(){
-        // Add minus icon for collapse element which is open by default
-        $(".collapse.show").each(function(){
-        	$(this).prev(".card-header").find(".fa").addClass("fa-minus").removeClass("fa-plus");
-        });
-        // Toggle plus minus icon on show hide of collapse element
-        $(".collapse").on('show.bs.collapse', function(){
-        	$(this).prev(".card-header").find(".fa").removeClass("fa-plus").addClass("fa-minus");
-        }).on('hide.bs.collapse', function(){
-        	$(this).prev(".card-header").find(".fa").removeClass("fa-minus").addClass("fa-plus");
-        });
+    // Add minus icon for collapse element which is open by default
+    $(".collapse.show").each(function(){
+        $(this).prev(".card-header").find(".fa").addClass("fa-minus").removeClass("fa-plus");
+    });
+    // Toggle plus minus icon on show hide of collapse element
+    $(".collapse").on('show.bs.collapse', function(){
+        $(this).prev(".card-header").find(".fa").removeClass("fa-plus").addClass("fa-minus");
+    }).on('hide.bs.collapse', function(){
+        $(this).prev(".card-header").find(".fa").removeClass("fa-minus").addClass("fa-plus");
+    });
 });
 
 
@@ -90,7 +90,7 @@ const $tableID = $('#table');
  <tr>
   <td class="pt-3-half d-flex align-items-center " contenteditable="true">
       <div class="imagescrollimg m-0">
-          <img src="../../../shoppy/media/productimages/product1.jpg" alt="cartproduct">
+          <img src="../img/productimages/product1.jpg" alt="cartproduct">
       </div>
       <div class="cart-prod-name-wrapper pl-4">
           <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
@@ -211,5 +211,4 @@ const $tableID = $('#table');
     }
 
  }
-
 

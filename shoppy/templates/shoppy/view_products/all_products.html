@@ -1,0 +1,197 @@
+{% extends 'shoppy/layout.html' %}
+{% load static %}
+{% block content %}
+   <div class="col-sm-12">
+       <div class="card-header text-left cart-header-text text-uppercase">
+           <span>All Products</span>
+       </div>
+   </div>
+
+   <div class="col-sm-12 my-5">
+       <div class="col-sm-12 row">
+{#           sidebar#}
+           <div style="padding-top: 70px;" class="col-sm-12 col-md-3 col-lg-3 col-xl-3 product-sidebar">
+                <div class="col-sm-12">
+{#                    brand#}
+                    <div class="filter mb-4">
+                        <div class="accordion" id="accordionExample275">
+                          <div class="card z-depth-0 bordered">
+                            <div class="card-header card-header-custom " id="headingOne2">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link color-orange-shoppy" type="button" data-toggle="collapse" data-target="#collapseOne2"
+                                  aria-expanded="true" aria-controls="collapseOne2">
+                                  Brand
+                                </button>
+                              </h5>
+                            </div>
+                            <div id="collapseOne2" class="collapse" aria-labelledby="headingOne2"
+                              data-parent="#accordionExample275">
+                              <div class="card-body card-body-custom">
+                                <ul>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+{#                    category#}
+                    <div class="filter mb-4">
+                        <div class="accordion" id="accordionExample275">
+                          <div class="card z-depth-0 bordered">
+                            <div class="card-header card-header-custom " id="headingOne2">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link color-orange-shoppy" type="button" data-toggle="collapse" data-target="#category"
+                                  aria-expanded="true" aria-controls="collapseOne2">
+                                  Category
+                                </button>
+                              </h5>
+                            </div>
+                            <div id="category" class="collapse" aria-labelledby="headingOne2"
+                              data-parent="#accordionExample275">
+                              <div class="card-body card-body-custom">
+                                <ul>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+{#                    variant#}
+                    <div class="filter mb-4">
+                        <div class="accordion" id="accordionExample275">
+                          <div class="card z-depth-0 bordered">
+                            <div class="card-header card-header-custom " id="headingOne2">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link color-orange-shoppy" type="button" data-toggle="collapse" data-target="#variant"
+                                  aria-expanded="true" aria-controls="collapseOne2">
+                                  Variant
+                                </button>
+                              </h5>
+                            </div>
+                            <div id="variant" class="collapse" aria-labelledby="headingOne2"
+                              data-parent="#accordionExample275">
+                              <div class="card-body card-body-custom">
+                                <ul>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                           Samsung
+                                        </li>
+                                    </a>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+{#           productwrapper#}
+           <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9 product-sidebar">
+                 <div class="col-sm-12 row">
+                    <div class="drop_filter">
+                       <!-- filter dropdown -->
+                        <a style="" class="btn dropdown-toggle  mr-4 filter-dropdown-btn"  data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">Price</a>
+
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                        <!-- filter dropdown -->
+                    </div>
+
+                    <div class="drop_filter">
+                       <!-- filter dropdown -->
+                        <a class="btn dropdown-toggle mr-4 filter-dropdown-btn"  data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">Price</a>
+
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                        <!-- filter dropdown -->
+                    </div>
+
+                    <div class="drop_filter">
+                       <!-- filter dropdown -->
+                        <a class="btn dropdown-toggle mr-4 filter-dropdown-btn"  data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">Price</a>
+
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                        <!-- filter dropdown -->
+                    </div>
+                 </div>
+                <div class="col-sm-12 row">
+
+                </div>
+           </div>
+       </div>
+   </div>
+{% endblock %}

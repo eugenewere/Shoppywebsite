@@ -86,7 +86,7 @@
                       <label for="validationCustom03">Phone number</label>
                       <input name="phone_number" type="number" class="form-control" id="validationCustom03" placeholder="Phone number" required>
                       <div class="invalid-feedback">
-                        Please provide a valid city.
+                        Please provide your phone number.
                       </div>
                       <div class="valid-feedback">
                         Nice .
@@ -129,6 +129,10 @@
                 <div class=" pt-3">
                     <small class="text-muted medium-text">
                         Already have an account? <a href="{% url 'Shoppy:shoppy-login' %}" class="ml-2">Log In</a>
+                    </small>
+                    <br>
+                    <small class="text-muted medium-text mt-2">
+                        Register as a seller? <a href="{% url 'Shoppy:shoppy-seller-reg' %}" class="ml-2">Here</a>
                     </small>
                 </div>
     </div>

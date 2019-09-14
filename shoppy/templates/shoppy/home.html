@@ -1,26 +1,40 @@
 {% extends 'shoppy/layout.html' %}
+{% load static %}
+{% load humanize %}
+{% load call_method %}
+
+    {% block links %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/carousel.css' %}">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+        <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
+
+    {% endblock %}
 {% block content %}
 
 {#    couresellstart#}
     <div class="carousel-container">
         <div id="carouselExampleFade" class="carousel carousel-custom slide carousel-fade" data-ride="carousel">
               <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleFade" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleFade" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleFade" data-slide-to="2"></li>
+                  {% for carousel in carousels %}
+                      <li data-target="#carouselExampleFade" data-slide-to="{{ carousels.id }}" class="{% if forloop.first%}active{%endif%}"></li>
+                  {% endfor %}
               </ol>
 
+
               <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img src="../../../shoppy/media/carousell/carousell1.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="../../../shoppy/media/carousell/carousell2.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="../../../shoppy/media/carousell/carousell3.jpg" class="d-block w-100" alt="...">
-                </div>
+              {% for carousel in carousels %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                      <img src="{{ carousel.image.url }}" class="d-block w-100" alt="{{ carousel.description }}">
+                        <div  class="carousel-caption-custom carousel-caption d-none d-md-block">
+                            <div class="animated fadeInDown carousel-caption-wrapper">
+                              <h5 id="k_{{ carousel.id }}" title="{{ carousel.description }}" class="text">{{ carousel.description|truncatechars:30 }}</h5>
+                            </div>
+                        </div>
+                    </div>
+              {% endfor %}
               </div>
+
 
                <a href="#carouselExampleFade" class="carousel-control-prev-container">
                    <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
@@ -34,11 +48,10 @@
                         <span class="sr-only">Next</span>
                    </a>
                </a>
-
         </div>
     </div>
 {#    coursellend#}
-
+{% if featured_products %}
 {#    featuredproduct#}
     <div class="featured-products-container ">
         <div class="col-sm-12 py-6 px-5">
@@ -57,194 +70,426 @@
                 </div>
             </div>
 
-           <div class="divider"></div>
+            <div class="divider"></div>
 
-            <div class="product-list col-sm-12 ">
-                <div class="row d-flex justify-content-center">
-    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0">
+
+            <div class="row">
+
+                <div id="exampleSlider" class="exampleSlider">
+                   <div class="MS-content">
+                       {% for featured_product in featured_products %}
+                           <a href="{% url 'Shoppy:shoppy_product_details' featured_product.id %}">
+                           {#                    productcard#}
+                           <div class="item product-card-wrapper  p-0 ">
                             <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product1.jpg" alt="productname">
+                                <img src="{{ featured_product.featured_url.url }}" alt="productname">
                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button" onclick="snackBarA()"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
+                                    <a title="View Details" href="{% url 'Shoppy:shoppy_product_details' featured_product.id %}" class="magic-button" style=" display: flex; justify-content: center;"> <i class=" cart-icon far fa-eye"></i></a>
+                                    {% if featured_product.id|is_product_in_wishlist:request.user %}
+                                      <a  style=" display: flex; justify-content: center;" href="{% url 'Shoppy:remove_from_wishlist' featured_product.id request.path|make_safe %}" title="Remove Item From Your Wishlist" class="magic-button" onclick="snackBar()"><i style="color: red;" class="wishlist-icon fas fa-heart "></i></a>
+                                    {% else %}
+                                      <a title="Add To Cart" style=" display: flex; justify-content: center;" href="{% url 'Shoppy:add_to_wishlist' featured_product.id request.path|make_safe %}"  class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></a>
+                                    {% endif %}
                                 </div>
+                                {% if  featured_product.price_after_offer and featured_product.id|product_on_offer %}
+                                    {% for offer in featured_product.id|product_on_offer %}
+                                        <div class="offer-wrapper">
+                                            <span title="{{ offer.end_time|date:"Y-m-d h:i A" }}" id="f_{{ featured_product.id }}" class="eta">{{ offer.end_time|date:"Y-m-d h:i A" }}</span>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                             <div class="col-sm-12 product-card-detail d-flex ">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
+                                <h4 class="product-name text-capitalize">{{ featured_product.name|truncatechars:20 }}</h4>
+                                <span class="product-quantity">({{ featured_product.inventory_qty|floatformat:0 }})</span>
                             </div>
                             <div class="col-sm-12 card-ratings-wrapper">
-                               <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
+                               <div class=" ml-auto">
+                                   {% if featured_product.id|average_ratings >= 5 %}
+                                        <div class="rate">
+                                        <input disabled checked type="radio"  value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input disabled  type="radio"  value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input disabled  type="radio"  value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input disabled  type="radio"  value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input disabled  type="radio"  value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+
+                                   {% elif featured_product.id|average_ratings >= 4 %}
+                                       <div class="rate">
+                                        <input disabled  type="radio" value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input disabled checked type="radio" value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input disabled  type="radio" value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input disabled  type="radio" value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input disabled  type="radio" value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+
+                                   {% elif featured_product.id|average_ratings >= 3 %}
+                                       <div class="rate">
+                                        <input disabled  type="radio" value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input disabled  type="radio" value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input disabled checked type="radio" value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input disabled  type="radio" value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input disabled  type="radio" value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+
+                                   {% elif featured_product.id|average_ratings >= 2 %}
+                                       <div class="rate">
+                                        <input disabled  type="radio" value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input disabled  type="radio" value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input disabled  type="radio" value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input disabled checked type="radio" value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input disabled  type="radio" value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+
+                                   {% elif featured_product.id|average_ratings >= 1 %}
+                                       <div class="rate">
+                                        <input  type="radio" disabled value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input  type="radio" disabled value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input  type="radio" disabled value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input  type="radio" disabled value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input checked type="radio" disabled value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+                                   {% else %}
+                                       <div class="rate">
+                                        <input  type="radio" disabled value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input  type="radio" disabled value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input  type="radio" disabled value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input  type="radio" disabled value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input  type="radio" disabled value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                       </div>
+                                   {% endif %}
+                               </div>
                             </div>
                             <div class="col-sm-12 product-card-price">
                                  <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
+                                     {% if  featured_product.price_after_offer and featured_product.id|product_on_offer %}
+                                        <div style="display: flex;flex-direction: column;">
+                                            <span> {{ featured_product.price_after_offer|floatformat:1|intcomma }}Kshs</span>
+                                            <span class="striked-price">{{ featured_product.unit_cost|floatformat:1|intcomma }} Kshs</span>
+                                        </div>
+                                    {% else %}
+                                        <span style="margin-bottom: 21px"> {{ featured_product.unit_cost|floatformat:1|intcomma }}Kshs</span>
+                                    {% endif %}
+                                 </span>
                             </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
+                                {%  if featured_product.seller.store_logo.url %}
+                                    <div class="col-sm-12 seller-logo">
+                                        <img src="{{ featured_product.seller.store_logo.url }}" alt="{{ featured_product.seller.store_name }}">
+                                    </div>
+                                {%  else %}
+                                    <div class="col-sm-12 seller-logo">
+                                        <img src="{% static 'img/no image/no_seller_logo.png' %}" alt="">
+                                    </div>
+                                {% endif %}
                             <div class="divider-custom"></div>
                             <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
+                                {% if featured_product.id|is_product_in_cart:request.user %}
+                                <a href="" class="product-button product-button-link text-white" data-toggle="modal" data-target="#"><i class=" text-white fa fa-cart-plus"></i></a>
+                                {% else %}
+                                <a href="" class="product-button product-button-link" data-toggle="modal" data-target="#fp{{ featured_product.id }}">Add To Cart</a>
+                                {% endif %}
                             </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product2.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button table-add"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                 <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
+                            {% if featured_product.id|product_on_offer %}
+                                {% for offer in featured_product.id|product_on_offer %}
+                                    <span class="badge-custom">
+                                        Save {{ offer.discount }}%
                                     </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
+                                {% endfor %}
+                            {% endif %}
                             </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product3.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price ">
-                                 <span class=" d-flex flex-column ">
-                                    <span class="d-flex price-text" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex price-text striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <div>
-                                    <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                                </div>
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product4.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex align-items-center">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                </div>
+                           {#                    card#}
+                           </a>
+                       {% endfor %}
+                   </div>
+                   <div class="MS-controls">
+                       <button class="MS-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+                       <button class="MS-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+                   </div>
+               </div>
             </div>
         </div>
     </div>
 {#    end of featured#}
+{% endif %}
+
+ <!-- add to cart modal -->
+{% for product in products %}
+    <!-- Modal -->
+    <div class="modal  fade" id="kk{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-orange-shoppy text-white">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add To {{ product.name }} Cart</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true"><i class="fas fa-times-circle"></i></span>
+            </button>
+          </div>
+          <form action="{% url 'Shoppy:shoppy-add-cart' product.id %}" method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row">
+                       <div class="col-md-1 product-container product-container-custom p-0 ">
+                        <div class="imagescrollwrapper" style="background-color: white;">
+                           {% if product.images %}
+                           {% for image in product.images %}
+                               <div class="imagescrollimg">
+                                   <img onclick="imageSwaps(this)" src="{{ image.image.url }}" alt="">
+                               </div>
+                           {% endfor %}
+                           {% else %}
+                               <div class="imagescrollimg">
+                                   <img  src="{% static 'img/no image/no-product-image.png' %}" alt="">
+                               </div>
+                           {% endif %}
+                           </div>
+                        </div>
+
+                        <div class="col-md-4  add-to-cart-image p-0">
+                             <img id="expandedcartimg" class="expandedimg" src="{{ product.featured_url.url }}" alt="{{ product.name }}">
+                        </div>
+                        <div class="col-md-6 pl-5">
+                            <div class="row ">
+                                <h2 class="text-capitalize">{{ product.name }}</h2>
+                            </div>
+                            <div class="row py-2">
+                                {% if  product.price_after_offer and product.id|product_on_offer %}
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span> {{ product.price_after_offer|floatformat:1|intcomma }}Kshs</span>
+                                        <span class="striked-price">{{ product.unit_cost|floatformat:1|intcomma }} Kshs</span>
+                                    </div>
+                                {% else %}
+                                    <span style=""> {{ product.unit_cost|floatformat:1|intcomma }}Kshs</span>
+                                {% endif %}
+    {#                            <span class="size2 text-muted font-italic">{{ product.unit_cost }} Kshs</span>#}
+                            </div>
+                            <div class="row">
+                                <span>{{ product.short_description }}</span>
+                            </div>
+    {#                                    <input type="text" hidden name="buyer">#}
+                            <div class="row py-3">
+                                <div class="col-sm-12 row pt-3">
+    {#                                            {% if product.product_variant_options.count > 0 %}#}
+                                    {% if product.variants %}
+                                    {% for variant in  product.variants %}
+                                       <div class="flex  col-sm-12 col-md-6 ">
+                                            <div class="control-label py-2 text-capitalize">{{ variant.name}}</div>
+                                            <div class=" respon6-next w-100">
+                                                <div class="rs1-select2 bor8 bg0">
+                                                    <select class="browser-primary custom-select" name="variant_options[]">
+                                                      <option class="text-muted" selected>Open this select menu</option>
+
+                                                        {% for option in variant.options %}
+                                                            {%  if variant.name|lower == 'color'  %}
+                                                                 <span style="background-color:{{ option.name|lower }};" class="color-wrapper"></span> <i class="fa-file"></i> <option class="text-capitalize" value="{{ option.id }}"> {{ option.name }}</option>
+                                                            {% else %}
+                                                                 <option class="text-capitalize" value="{{ option.id }}">{{ option.name }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+                                                    <div class="dropDownSelect2"></div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                    {% endfor %}
+                                    {% else %}
+                                        <div class="flex  col-sm-12 col-md-6 ">
+                                            <div class="control-label py-2 text-capitalize">No Options for this product</div>
+                                            <div class=" respon6-next w-100">
+                                                <div class="rs1-select2 bor8 bg0">
+                                                    <select disabled class="browser-primary custom-select" name="">
+                                                       <options value="No Variant Options For This Product"  >No Variant Options For This Product</options>
+                                                    </select>
+                                                    <div class="dropDownSelect2"></div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+                            {% if  product.price_after_offer and product.id|product_on_offer %}
+                                <input name="unit_cost" type="number" hidden value="{{ product.price_after_offer }}">
+                            {% else %}
+                                <input name="unit_cost" type="number" hidden value="{{ product.unit_cost }}">
+                            {% endif %}
+
+                            <div class="row py-3 pl-3 d-flex flex-column">
+                                <div class="control-label py-2">Quantity</div>
+                                <div class="slider-container ">
+                                    <button class="btn-num-product-down slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
+                                    <input value="1" class="slider-contents slider-contents-center num-product d-flex justify-content-center align-items-center slider_count" type="number" name="quantity" >
+                                    <button class="btn-num-product-up slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Add to Cart</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+
+<!-- add to cart modal -->
+{% for product in featured_products %}
+    <!-- Modal -->
+    <div class="modal  fade" id="fp{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-orange-shoppy text-white">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add To {{ product.name }} Cart</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true"><i class="fas fa-times-circle"></i></span>
+            </button>
+          </div>
+          <form action="{% url 'Shoppy:shoppy-add-cart' product.id %}" method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row">
+                       <div class="col-md-1 product-container product-container-custom p-0 ">
+                        <div class="imagescrollwrapper" style="background-color: white;">
+                           {% if product.images %}
+                           {% for image in product.images %}
+                               <div class="imagescrollimg">
+                                   <img onclick="imageSwaps(this)" src="{{ image.image.url }}" alt="">
+                               </div>
+                           {% endfor %}
+                           {% else %}
+                               <div class="imagescrollimg">
+                                   <img  src="{% static 'img/no image/no-product-image.png' %}" alt="">
+                               </div>
+                           {% endif %}
+                           </div>
+                        </div>
+
+                        <div class="col-md-4  add-to-cart-image p-0">
+                             <img id="expandedcartimg" class="expandedimg" src="{{ product.featured_url.url }}" alt="{{ product.name }}">
+                        </div>
+                        <div class="col-md-6 pl-5">
+                            <div class="row ">
+                                <h2 class="text-capitalize">{{ product.name }}</h2>
+                            </div>
+                            <div class="row py-2">
+                                {% if  product.price_after_offer and product.id|product_on_offer %}
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span> {{ product.price_after_offer|floatformat:1|intcomma }}Kshs</span>
+                                        <span class="striked-price">{{ product.unit_cost|floatformat:1|intcomma }} Kshs</span>
+                                    </div>
+                                {% else %}
+                                    <span style=""> {{ product.unit_cost|floatformat:1|intcomma }}Kshs</span>
+                                {% endif %}
+    {#                            <span class="size2 text-muted font-italic">{{ product.unit_cost }} Kshs</span>#}
+                            </div>
+                            <div class="row">
+                                <span>{{ product.short_description }}</span>
+                            </div>
+    {#                                    <input type="text" hidden name="buyer">#}
+                            <div class="row py-3">
+                                <div class="col-sm-12 row pt-3">
+    {#                                            {% if product.product_variant_options.count > 0 %}#}
+                                    {% if product.variants %}
+                                    {% for variant in  product.variants %}
+                                       <div class="flex  col-sm-12 col-md-6 ">
+                                            <div class="control-label py-2 text-capitalize">{{ variant.name}}</div>
+                                            <div class=" respon6-next w-100">
+                                                <div class="rs1-select2 bor8 bg0">
+                                                    <select class="browser-primary custom-select" name="variant_options[]">
+                                                      <option class="text-muted" selected>Open this select menu</option>
+
+                                                        {% for option in variant.options %}
+                                                            {%  if variant.name|lower == 'color'  %}
+                                                                 <span style="background-color:{{ option.name|lower }};" class="color-wrapper"></span> <i class="fa-file"></i> <option class="text-capitalize" value="{{ option.id }}"> {{ option.name }}</option>
+                                                            {% else %}
+                                                                 <option class="text-capitalize" value="{{ option.id }}">{{ option.name }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+                                                    <div class="dropDownSelect2"></div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                    {% endfor %}
+                                    {% else %}
+                                        <div class="flex  col-sm-12 col-md-6 ">
+                                            <div class="control-label py-2 text-capitalize">No Options for this product</div>
+                                            <div class=" respon6-next w-100">
+                                                <div class="rs1-select2 bor8 bg0">
+                                                    <select disabled class="browser-primary custom-select" name="">
+                                                       <options value="No Variant Options For This Product"  >No Variant Options For This Product</options>
+                                                    </select>
+                                                    <div class="dropDownSelect2"></div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            {% if  product.price_after_offer and product.id|product_on_offer %}
+                                <input name="unit_cost" type="number" hidden value="{{ product.price_after_offer }}">
+                            {% else %}
+                                <input name="unit_cost" type="number" hidden value="{{ product.unit_cost }}">
+                            {% endif %}
+                            <div class="row py-3 pl-3 d-flex flex-column">
+                                <div class="control-label py-2">Quantity</div>
+                                <div class="slider-container ">
+                                    <button class="btn-num-product-down slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
+                                    <input value="1" class="slider-contents slider-contents-center num-product d-flex justify-content-center align-items-center slider_count" type="number" name="quantity" >
+                                    <button class="btn-num-product-up slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Add to Cart</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+
 {#    normalproduct#}
     <div class="featured-products-container py-6 px-5">
         <div class="col-sm-12">
@@ -252,7 +497,6 @@
                 <div class="col-sm-4 ">
                     <span class="featured-product-title">All Deals</span>
                 </div>
-
                 <div class="col-sm-4 text-right link ml-auto">
                     <a class="featured-product-title" href="#">See All <i class="fas fa-arrow-right"></i></a>
                 </div>
@@ -260,370 +504,158 @@
 
            <div class="divider"></div>
 
-            <div class="product-list col-sm-12 py-5">
-                <div class="row d-flex justify-content-center">
+            <div class="product-list col-sm-12 py-5 px-3">
+                <div class="row d-flex flex-wrap  justify-content-center" style="margin: 0 43px;">
+                    {% for product in products %}
+                         <a href="{% url 'Shoppy:shoppy_product_details' product.id %}">
     {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 mb-6">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product1.jpg" alt="productname">
-                                <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
+                    <div class="col-sm-2 product-card-wrapper  p-0 mb-6 ">
+                        <div class="image-card-wrapper col-sm-12 p-0">
+                            <img src="{{ product.featured_url.url }}" alt="productname">
+                            <div class="magic-buttons-container d-flex align-contents-between">
+                                <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
+                                {% if product.id|is_product_in_wishlist:request.user %}
+                                <a style=" display: flex; justify-content: center;" href="{% url 'Shoppy:remove_from_wishlist' product.id request.path|make_safe  %}" title="Remove Item From Your Wishlist" class="magic-button" onclick="snackBar()"><i style="color: red;" class="wishlist-icon fas fa-heart "></i></a>
+                                {% else %}
+                                <a style=" display: flex; justify-content: center;" href="{% url 'Shoppy:add_to_wishlist' product.id request.path|make_safe  %}"  class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></a>
+                                {% endif %}
+                            </div>
+                            {% if  product.price_after_offer and product.id|product_on_offer %}
+                                {% for offer in product.id|product_on_offer %}
+                                    <div class="offer-wrapper">
+                                         <span title="{{ offer.end_time|date:"Y-m-d h:i A" }}" id="a_{{ product.id }}" class="eta">{{ offer.end_time|date:"Y-m-d h:i A" }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12 product-card-detail d-flex ">
+                            <h4 class="product-name">{{ product.name|truncatechars:20 }}</h4>
+                            <span class="product-quantity">({{ product.inventory_qty|floatformat:0 }})</span>
+                        </div>
+                        <div class="col-sm-12 card-ratings-wrapper">
+                           <div class="ml-auto">
+                                   {% if product.id|average_ratings >= 5 %}
+                                    <div class="rate">
+                                    <input disabled checked type="radio"  value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                    <input disabled  type="radio"  value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                    <input disabled  type="radio"  value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                    <input disabled  type="radio"  value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                    <input disabled  type="radio"  value="1" />
+                                        <label for="star1" title="text">1 star</label>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex ">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                               <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                 <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
 
+                               {% elif product.id|average_ratings >= 4 %}
+                                   <div class="rate">
+                                    <input disabled  type="radio" value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                    <input disabled checked type="radio" value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                    <input disabled  type="radio" value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                    <input disabled  type="radio" value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                    <input disabled  type="radio" value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                </div>
+
+                               {% elif product.id|average_ratings >= 3 %}
+                                   <div class="rate">
+                                    <input disabled  type="radio" value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                    <input disabled  type="radio" value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                    <input disabled checked type="radio" value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                    <input disabled  type="radio" value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                    <input disabled  type="radio" value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                </div>
+
+                               {% elif product.id|average_ratings >= 2 %}
+                                   <div class="rate">
+                                    <input disabled  type="radio" value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                    <input disabled  type="radio" value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                    <input disabled  type="radio" value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                    <input disabled checked type="radio" value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                    <input disabled  type="radio" value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                </div>
+
+                               {% elif product.id|average_ratings >= 1 %}
+                                   <div class="rate">
+                                    <input  type="radio" disabled value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                    <input  type="radio" disabled value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                    <input  type="radio" disabled value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                    <input  type="radio" disabled value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                    <input checked type="radio" disabled value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                </div>
+                               {% else %}
+                                   <div class="rate">
+                                    <input  type="radio" disabled value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                    <input  type="radio" disabled value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                    <input  type="radio" disabled value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                    <input  type="radio" disabled value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                    <input  type="radio" disabled value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                   </div>
+                               {% endif %}
+                           </div>
+                        </div>
+                        <div class="col-sm-12 product-card-price">
+                             <span class="price-text d-flex flex-column">
+                                {% if  product.price_after_offer and product.id|product_on_offer %}
+                                    <div style="display: flex;flex-direction: column;">
+                                        <span> {{ product.price_after_offer|floatformat:1|intcomma }}Kshs</span>
+                                        <span class="striked-price">{{ product.unit_cost|floatformat:1|intcomma }} Kshs</span>
+                                    </div>
+                                {% else %}
+                                    <span style="margin-bottom: 21px"> {{ product.unit_cost|floatformat:1|intcomma }}Kshs</span>
+                                {% endif %}
+
+                            </span>
+                        </div>
+                        <div class="col-sm-12 seller-logo">
+                            <img src="{{ product.seller.store_logo.url }}" alt="">
+                        </div>
+                        <div class="divider-custom"></div>
+                        <div class="col-sm-12">
+                            {% if product.id|is_product_in_cart:request.user %}
+                            <a href="" class="product-button product-button-link text-white" data-toggle="modal" data-target="#"><i class="text-white fa fa-cart-plus"></i></a>
+                            {% else %}
+                            <a href="" class="product-button product-button-link" data-toggle="modal" data-target="#kk{{ product.id }}">Buy Now</a>
+                            {% endif  %}
+                        </div>
+                        {% if product.id|product_on_offer %}
+                            {% for offer in product.id|product_on_offer %}
+                                <span class="badge-custom">
+                                    Save {{ offer.discount }}%
                                 </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
     {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 mb-6">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product2.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                 <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 mb-6">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product3.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price ">
-                                 <span class=" d-flex flex-column ">
-                                    <span class="d-flex price-text" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex price-text striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <div>
-                                    <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                                </div>
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 mb-6">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product4.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex align-items-center">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
+                         </a>
+                    {% endfor %}
                 </div>
 
-                <div class="row d-flex justify-content-center">
-    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0">
-                            <div class="image-card-wrapper col-sm-12 p-0 mb-6">
-                                <img src="../../../shoppy/media/productimages/product1.jpg" alt="productname">
-                                <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex ">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                               <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                 <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 mb-6">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product2.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                 <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 mb-6">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product3.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price ">
-                                 <span class=" d-flex flex-column ">
-                                    <span class="d-flex price-text" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex price-text striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <div>
-                                    <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                                </div>
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 mb-6">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product4.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex align-items-center">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                </div>
             </div>
         </div>
     </div>
@@ -643,368 +675,156 @@
 
            <div class="divider"></div>
 
-            <div class="product-list col-sm-12 py-5">
-                <div class="row d-flex justify-content-center mb-6">
+            <div class="product-list col-sm-12 py-5 px-3">
+               <div class="row d-flex flex-wrap  justify-content-center" style="margin: 0 43px;">
+                    {% for product in products %}
+                         <a href="{% url 'Shoppy:shoppy_product_details' product.id %}">
     {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0">
+                    <div class="col-sm-2 product-card-wrapper  p-0 mb-6 ">
                             <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product1.jpg" alt="productname">
+                                <img src="{{ product.featured_url.url }}" alt="productname">
                                 <div class="magic-buttons-container d-flex align-contents-between">
                                     <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
+                                    {% if product.id|is_product_in_wishlist:request.user %}
+                                    <a style=" display: flex; justify-content: center;" href="{% url 'Shoppy:remove_from_wishlist' product.id request.path|make_safe  %}" title="Remove Item From Your Wishlist" class="magic-button" onclick="snackBar()"><i style="color: red;" class="wishlist-icon fas fa-heart "></i></a>
+                                    {% else %}
+                                    <a style=" display: flex; justify-content: center;" href="{% url 'Shoppy:add_to_wishlist' product.id request.path|make_safe %}"  class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></a>
+                                    {% endif %}
                                 </div>
+                                {% if  product.price_after_offer and product.id|product_on_offer %}
+                                {% for offer in product.id|product_on_offer %}
+                                    <div class="offer-wrapper">
+                                        <span title="{{ offer.end_time|date:"Y-m-d h:i A" }}" id="p_{{ product.id }}" class="eta"></span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             </div>
                             <div class="col-sm-12 product-card-detail d-flex ">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
+                                <h4 class="product-name">{{ product.name|truncatechars:20  }}</h4>
+                                <span class="product-quantity">({{ product.inventory_qty|floatformat:0 }})</span>
                             </div>
                             <div class="col-sm-12 card-ratings-wrapper">
                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
+                                   {% if product.id|average_ratings >= 5 %}
+                                        <div class="rate">
+                                        <input disabled checked type="radio"  value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input disabled  type="radio"  value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input disabled  type="radio"  value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input disabled  type="radio"  value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input disabled  type="radio"  value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+
+                                   {% elif product.id|average_ratings >= 4 %}
+                                       <div class="rate">
+                                        <input disabled  type="radio" value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input disabled checked type="radio" value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input disabled  type="radio" value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input disabled  type="radio" value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input disabled  type="radio" value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+
+                                   {% elif product.id|average_ratings >= 3 %}
+                                       <div class="rate">
+                                        <input disabled  type="radio" value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input disabled  type="radio" value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input disabled checked type="radio" value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input disabled  type="radio" value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input disabled  type="radio" value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+
+                                   {% elif product.id|average_ratings >= 2 %}
+                                       <div class="rate">
+                                        <input disabled  type="radio" value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input disabled  type="radio" value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input disabled  type="radio" value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input disabled checked type="radio" value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input disabled  type="radio" value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+
+                                   {% elif product.id|average_ratings >= 1 %}
+                                       <div class="rate">
+                                        <input  type="radio" disabled value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input  type="radio" disabled value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input  type="radio" disabled value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input  type="radio" disabled value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input checked type="radio" disabled value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                    </div>
+                                   {% else %}
+                                       <div class="rate">
+                                        <input  type="radio" disabled value="5" />
+                                            <label for="star5" title="text">5 stars</label>
+                                        <input  type="radio" disabled value="4" />
+                                            <label for="star4" title="text">4 stars</label>
+                                        <input  type="radio" disabled value="3" />
+                                            <label for="star3" title="text">3 stars</label>
+                                        <input  type="radio" disabled value="2" />
+                                            <label for="star2" title="text">2 stars</label>
+                                        <input  type="radio" disabled value="1" />
+                                            <label for="star1" title="text">1 star</label>
+                                       </div>
+                                   {% endif %}
+                               </div>
                             </div>
                             <div class="col-sm-12 product-card-price">
                                  <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
+                                    {% if  product.price_after_offer and product.id|product_on_offer %}
+                                        <div style="display: flex;flex-direction: column;">
+                                            <span> {{ product.price_after_offer|floatformat:1|intcomma }}Kshs</span>
+                                            <span class="striked-price">{{ product.unit_cost|floatformat:1|intcomma }} Kshs</span>
+                                        </div>
+                                    {% else %}
+                                        <span style="margin-bottom: 21px"> {{ product.unit_cost|floatformat:1|intcomma }}Kshs</span>
+                                    {% endif %}
 
                                 </span>
                             </div>
                             <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
+                                <img src="{{ product.seller.store_logo.url }}" alt="">
                             </div>
                             <div class="divider-custom"></div>
                             <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
+                                {% if product.id|is_product_in_cart:request.user %}
+                                <a href="" class="product-button product-button-link text-white" data-toggle="modal" data-target="#"><i class=" text-white fa fa-cart-plus"></i></a>
+                                {% else %}
+                                <a  href="" class="product-button product-button-link" data-toggle="modal" data-target="#kk{{ product.id }}">Buy Now</a>
+                                {% endif %}
                             </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 ">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product2.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                 <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
+                        {% if product.id|product_on_offer %}
+                            {% for offer in product.id|product_on_offer %}
+                                <span class="badge-custom">
+                                    Save {{ offer.discount }}%
                                 </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
     {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 ">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product3.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price ">
-                                 <span class=" d-flex flex-column ">
-                                    <span class="d-flex price-text" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex price-text striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <div>
-                                    <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                                </div>
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 ">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product4.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex align-items-center">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                </div>
-                <div class="row d-flex justify-content-center ">
-    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0">
-                            <div class="image-card-wrapper col-sm-12 p-0 ">
-                                <img src="../../../shoppy/media/productimages/product1.jpg" alt="productname">
-                                <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex ">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                               <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                 <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 ">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product2.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                 <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 ">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product3.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price ">
-                                 <span class=" d-flex flex-column ">
-                                    <span class="d-flex price-text" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex price-text striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <div>
-                                    <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                                </div>
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
-                    {#                    productcard#}
-                    <div class="col-md-2 product-card-wrapper  p-0 ">
-                            <div class="image-card-wrapper col-sm-12 p-0">
-                                <img src="../../../shoppy/media/productimages/product4.jpg" alt="productname">
-                                 <div class="magic-buttons-container d-flex align-contents-between">
-                                    <button class="magic-button" onclick="snackBarA()"> <i class=" cart-icon fas fa-shopping-cart"></i></button>
-                                    <button class="magic-button" onclick="snackBar()"><i class="wishlist-icon fas fa-heart"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 product-card-detail d-flex align-items-center">
-                                <h4 class="product-name">Hp pavilion 15 power</h4>
-                                <span class="product-quantity">(77)</span>
-                            </div>
-                            <div class="col-sm-12 card-ratings-wrapper">
-                                <div class="ml-auto">
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                    <span class="rating-count"><i class="far fa-star"></i></span>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-12 product-card-price">
-                                <span class="price-text d-flex flex-column">
-                                    <span class="d-flex" >
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-                                    <span class="d-flex striked-price">
-                                        <span>Ksh</span>
-                                        <span>19,999</span>
-                                    </span>
-
-                                </span>
-                            </div>
-                            <div class="col-sm-12 seller-logo">
-                                <img src="../../../shoppy/media/sitelogo/sellerlogo.png" alt="">
-                            </div>
-                            <div class="divider-custom"></div>
-                            <div class="col-sm-12">
-                                <button class="product-button">Buy Now</button>
-                            </div>
-                    </div>
-    {#                    card#}
+                         </a>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -1013,3 +833,146 @@
 
 
 {% endblock content %}
+    {% block scripts %}
+
+        <script>
+          setInterval(carouselSliderText,2000);
+
+          function carouselSliderText() {
+            var texts = document.getElementsByClassName('text');
+            for(var i=0; i<texts.length; i++){
+                setTypingEffect(texts.item(i).id, texts.item(i).title);
+
+
+            }
+          }
+
+          function setTypingEffect(id, title) {
+                var t = id;
+                var typed = new Typed(id, {
+                strings: [title.innerText],
+                loop: true,
+                typeSpeed:2000,
+                backSpeed:1000,
+                backDelay:1000,
+                smartBackspace: true,
+                showCursor: true,
+                cursorChar: '|',
+                autoInsertCss: true,
+              });
+
+          }
+
+        </script>
+        <script>
+        setInterval(updateETA, 1000);
+
+        function updateETA() {
+            var eta_elements = document.getElementsByClassName('eta');
+            for(var i = 0; i < eta_elements.length; i++) {
+                setEta(eta_elements.item(i).id, eta_elements.item(i).title);
+            }
+        }
+        function setEta(id, time) {
+            // Set the date we're counting down to
+            var countDownDate = new Date(time).getTime();
+            // Get todays date and time
+            var now = new Date().getTime();
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now;
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Output the result in an element with id given
+            document.getElementById(id).innerHTML = days + "d " + hours + "h "
+                + minutes + "m " + seconds + "s ";
+            // If the count down is over, write some text
+            if (distance < 0) {
+                {#clearInterval(x);#}
+                document.getElementById(id).innerHTML = "EXPIRED";
+            }
+        }
+    </script>
+
+
+
+
+        <script type="text/javascript" src="{% static 'js/product_carousel.js' %}"></script>
+        <!-- Include jQuery -->
+        <script src="{% static 'css/jquery-2.2.4.min.js' %}"></script>
+
+        <!-- Include Multislider -->
+        <script src="{% static 'css/multislider.min.js' %}"></script>
+
+        <!-- Initialize element with Multislider -->
+{#        typedjs#}
+        <script type="text/javascript" src="{% static 'js/typed.js' %}"></script>
+
+        <script>
+            {#$('.carousel').carousel({#}
+            {#    interval: 6000})#}
+        </script>
+        <script>
+        $('.exampleSlider').multislider({
+            interval: 8000,
+            slideAll: true,
+            duration: 4500,
+
+        });
+        </script>
+        <script>
+            $('.btn-num-product-down').on('click', function(e){
+            e.preventDefault();
+            var numProduct = Number($(this).next().val());
+            if(numProduct > 1) $(this).next().val(numProduct - 1);
+            });
+
+            $('.btn-num-product-up').on('click', function(e){
+                e.preventDefault();
+                var numProduct = Number($(this).prev().val());
+                $(this).prev().val(numProduct + 1);
+            });
+        </script>
+        <script>
+            // imageswap for product details images
+            function imageSwaps(imgs) {
+              // Get the expanded image
+              var expandImg = document.getElementById("expandedcartimg");
+              // Use the same src in the expanded image as the image being clicked on from the grid
+              expandImg.src = imgs.src;
+                // Show the container element (hidden with CSS)
+              expandImg.parentElement.style.display = "block";
+            }
+        </script>
+        <script>
+            {#function setCookie(productName, productValue, exDays){#}
+            {#    var day = new Date();#}
+            {#    day.setTime(day.getTime()+(exDays*60*60*1000));#}
+            {#    var expires = 'expires'+d.toUTCString();#}
+            {#    document.cookie = productName+"="+productValue+";"+expires+"; path=http://127.0.0.1:8000/shoppy/"#}
+
+            {#function getCookie(productName){#}
+            {#    var name = productName + "=";#}
+            {#    var decodedCookie = decodeURIComponent(document.cookie);#}
+            {#    var ca = decodedCookie.split(';');#}
+            {#    for(var i = 0; i < ca.length; i++){#}
+            {#        var c = ca[i];#}
+            {#        while(c.charAt(0) === " "){#}
+            {#            c = c.substring(1);#}
+            {#        }#}
+            {#        if(c.indexOf(name)===0){#}
+            {#            return c.substring(name.length , c.length)#}
+            {#        }#}
+            {#    }#}
+            {#    return '';#}
+
+            {#function checkCookie(){#}
+            {#    var product = getCookie('{{ products.id.name }}');#}
+            {#    if (product !== " "){#}
+            {#        setCookie("{{ products.id.name }}", product, 200)#}
+            {#    }#}
+
+        </script>
+    {% endblock %}

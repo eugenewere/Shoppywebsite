@@ -1,15 +1,17 @@
 {% extends 'shoppy/layout.html' %}
-
+{% load static %}
+{% load call_method %}
+{% load humanize %}
 {% block content %}
 
     <div class="col-sm-12 row px-5 d-flex justify-content-center">
+        {% if carts %}
         <!-- Editable table -->
             <div class="card cart-container">
-              <h3 class="card-header text-left cart-header-text text-uppercase py-4">Cart (4)</h3>
+              <h3 class="card-header text-left cart-header-text text-uppercase py-4">Cart ({{ carts.count }})</h3>
               <div class="card-body cart-table-body">
                 <div id="table" class="table-editable">
-                  <span class="table-add float-right mb-3 mr-2"><a href="#" class="text-success"><i
-                        class="fas fa-plus fa-2x" aria-hidden="true"></i></a>
+                  <span class=" float-right mb-3 mr-2"><a href="{% url "Shoppy:shoppy-home" %}" class="btn btn-outline-warning">Continue Shopping</a>
                   </span>
                   <table class="table table-bordered table-responsive-md table-striped text-center">
                     <thead>
@@ -23,133 +25,59 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td class="pt-3-half d-flex align-items-center " contenteditable="false">
-                            <div class="imagescrollimg m-0">
-                                <img src="../../../shoppy/media/productimages/product2.jpg" alt="cartproduct">
-                            </div>
-                            <div class="cart-prod-name-wrapper pl-4">
-                                <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
-                            </div>
-
-                        </td>
-                        <td class="pt-3-half  " contenteditable="false">30</td>
-                        <td class="pt-3-half d-flex justify-content-center" contenteditable="false">
-                            <div class="slider-container">
-                                <button onclick="subtract()" class="slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
-                                <span class="slider-contents slider-contents-center d-flex justify-content-center align-items-center slider_count" id="slider_count">0</span>
-                                <button onclick="add()" class="slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </td>
-                        <td class="pt-3-half" contenteditable="false">
-                            <div>
-                                <span class="">
-                                    <button type="button" class="delete-button"><i class="far fa-heart"></i></button>
-                                 </span>
-                                 <span class="table-remove">
-                                    <button type="button" class="delete-button"><i class="fas fa-trash"></i></button>
-                                 </span>
-                            </div>
-                        </td>
-                        <td class="pt-3-half" contenteditable="false">Ksh 12,000</td>
-                        <td class="pt-3-half" contenteditable="false">Ksh 19,000</td>
-                      </tr>
+                    {% for cart in carts %}
                       <!-- This is our clonable table line -->
                       <tr>
                         <td class="pt-3-half d-flex align-items-center " contenteditable="false">
-                            <div class="imagescrollimg m-0">
-                                <img src="../../../shoppy/media/productimages/product4.jpg" alt="cartproduct">
+                            <div class="imagescrollimg m-0 position-relative">
+                                <img src="{{ cart.product.featured_url.url }}" alt="cartproduct">
                             </div>
+                            {% if cart.product.id|product_on_offer %}
+                                {% for offer in cart.product.id|product_on_offer %}
+                                    <span style="position: absolute; left: 33px;" class="badge badge-danger badge-pill text-white">Save {{ offer.discount }}%</span>
+                                {% endfor %}
+                            {% endif %}
+
                             <div class="cart-prod-name-wrapper pl-4">
-                                <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
+                                <p class="cart-prod-name-text text-capitalize">{{ cart.product.name|truncatechars:17 }}</p>
                             </div>
 
                         </td>
                         <td class="pt-3-half  " contenteditable="false">30</td>
                         <td class="pt-3-half d-flex justify-content-center" contenteditable="false">
                             <div class="slider-container">
-                                <button onclick="subtract()" class="slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
-                                <span class="slider-contents slider-contents-center d-flex justify-content-center align-items-center slider_count" id="slider_count">0</span>
-                                <button onclick="add()" class="slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
+                                <button class="btn-num-product-down slider-contents slider-contents-control border-right"></button>
+                                <input class="slider-contents slider-contents-center num-product d-flex justify-content-center align-items-center slider_count" type="number" name="quantity" value="{{ cart.quantity }}">
+                                <button class="btn-num-product-up slider-contents slider-contents-control border-left"></button>
                             </div>
                         </td>
                         <td class="pt-3-half" contenteditable="false">
                             <div>
                                 <span class="">
-                                    <button type="button" class="delete-button"><i class="far fa-heart"></i></button>
+                                    <a href="" class="delete-button"><i class="far fa-heart"></i></a>
                                  </span>
-                                 <span class="table-remove">
-                                    <button type="button" class="delete-button"><i class="fas fa-trash"></i></button>
+                                 <span class="">
+                                    <a href="{% url "Shoppy:shoppy_delete_cart_product" cart.id %}" class="delete-button"><i class="fas fa-trash"></i></a>
                                  </span>
                             </div>
                         </td>
-                        <td class="pt-3-half" contenteditable="false">Ksh 12,000</td>
-                        <td class="pt-3-half" contenteditable="false">Ksh 19,000</td>
+                        <td class="pt-3-half" contenteditable="false">
+                            {% if  cart.product.price_after_offer and cart.product.id|product_on_offer %}
+                                <div style="display: flex;flex-direction: column;">
+                                    <span> {{ cart.product.price_after_offer|floatformat:1|intcomma }}Kshs</span>
+                                </div>
+                            {% else %}
+                                <span style="margin-bottom: 21px"> {{ cart.product.unit_cost|floatformat:1|intcomma }}Kshs</span>
+                            {% endif %}
+
+                        </td>
+                        <td class="pt-3-half" contenteditable="false">
+                            {{ cart.total|floatformat:2|intcomma }} Kshs
+                        </td>
                       </tr>
                       <!-- This is our clonable table line -->
-                      <tr>
-                        <td class="pt-3-half d-flex align-items-center " contenteditable="false">
-                            <div class="imagescrollimg m-0">
-                                <img src="../../../shoppy/media/productimages/product3.jpg" alt="cartproduct">
-                            </div>
-                            <div class="cart-prod-name-wrapper pl-4">
-                                <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
-                            </div>
+                    {% endfor %}
 
-                        </td>
-                        <td class="pt-3-half  " contenteditable="false">30</td>
-                        <td class="pt-3-half d-flex justify-content-center" contenteditable="false">
-                            <div class="slider-container">
-                                <button onclick="subtract()" class="slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
-                                <span class="slider-contents slider-contents-center d-flex justify-content-center align-items-center slider_count" id="slider_count">0</span>
-                                <button onclick="add()" class="slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </td>
-                        <td class="pt-3-half" contenteditable="false">
-                            <div>
-                                <span class="">
-                                    <button type="button" class="delete-button"><i class="far fa-heart"></i></button>
-                                 </span>
-                                 <span class="table-remove">
-                                    <button type="button" class="delete-button"><i class="fas fa-trash"></i></button>
-                                 </span>
-                            </div>
-                        </td>
-                        <td class="pt-3-half" contenteditable="false">Ksh 12,000</td>
-                        <td class="pt-3-half" contenteditable="false">Ksh 19,000</td>
-                      </tr>
-                      <!-- This is our clonable table line -->
-                      <tr class="hide">
-                        <td class="pt-3-half d-flex align-items-center " contenteditable="false">
-                            <div class="imagescrollimg m-0">
-                                <img class="img-fluid" src="../../../shoppy/media/productimages/product2.jpg" alt="cartproduct">
-                            </div>
-                            <div class="cart-prod-name-wrapper pl-4">
-                                <p class="cart-prod-name-text">Infinix Hot S4, 6.2", 32GB + 3GB(Dual SIM), Blue</p>
-                            </div>
-
-                        </td>
-                        <td class="pt-3-half  " contenteditable="false">30</td>
-                        <td class="pt-3-half d-flex justify-content-center" contenteditable="false">
-                            <div class="slider-container">
-                                <button onclick="subtract()" class="slider-contents slider-contents-control border-right"><i class="fas fa-minus"></i></button>
-                                <span class="slider-contents slider-contents-center d-flex justify-content-center align-items-center slider_count" id="slider_count">0</span>
-                                <button onclick="add()" class="slider-contents slider-contents-control border-left"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </td>
-                        <td class="pt-3-half" contenteditable="false">
-                            <div>
-                                <span class="">
-                                    <button type="button" class="delete-button"><i class="far fa-heart"></i></button>
-                                 </span>
-                                 <span class="table-remove">
-                                    <button type="button" class="delete-button"><i class="fas fa-trash"></i></button>
-                                 </span>
-                            </div>
-                        </td>
-                        <td class="pt-3-half" contenteditable="false">Ksh 12,000</td>
-                        <td class="pt-3-half" contenteditable="false">Ksh 19,000</td>
-                      </tr>
                     </tbody>
                     <tfoot>
 
@@ -157,9 +85,20 @@
                             <td colspan="4"></td>
                             <td colspan="2">
                                 <div class="totals d-flex flex-column justify-content-center">
-                                    <span class="sub-totals sub-totals-custom py-3">Ksh 100,000</span>
-                                    <span class="totals py-3">Ksh 100,000</span>
-                                    <a href="#" class="product-button text-white mt-4">Buy Now</a>
+                                    <span class="sub-totals  py-3 d-flex">
+                                        <span class="mr-auto text-dark" >SubTotal </span>
+                                        Ksh {{ request.user|total_cost_exclusive_vat|floatformat:1|intcomma  }}
+                                    </span>
+                                    <span class="sub-totals sub-totals-custom py-3 d-flex">
+                                        <span class="mr-auto text-dark">Vat 16%</span>
+                                        Ksh {{ request.user|vat_cost|floatformat:1|intcomma  }}
+                                    </span>
+                                    <span class="sub-totals py-3 d-flex">
+                                        <span class="mr-auto text-dark"> Total Cost</span>
+                                        Ksh {{ request.user|total_cost_inclusive_of_vat|floatformat:1|intcomma }}
+                                    </span>
+
+                                    <a href="{% url 'Shoppy:shoppy-view_checkout' %}" class="product-button text-white mt-4">CheckOut</a>
                                 </div>
                             </td>
 
@@ -170,9 +109,41 @@
               </div>
             </div>
         <!-- Editable table -->
+        {% else %}
+            <div class="card cart-container">
+              <h3 class="card-header text-left cart-header-text text-uppercase py-4">Cart (0)</h3>
+              <div class="card-body cart-table-body">
+                <div id="table" class="table-editable">
+                  <span class=" float-right mb-3 mr-2"><a href="{% url "Shoppy:shoppy-home" %}" class="btn btn-outline-warning">Continue Shopping</a>
+                  </span>
+                    <div class="row mt-2 d-flex justify-content-center align-content-center align-items-center">
+                         <div class="col-sm-6" style="width: 200px; border: none;margin: 20px; overflow: hidden;">
+                             <h1 class="text-center py-5">No Cart For You Today</h1>
+                             <img class="img-fluid w-100 h-100" src="{% static 'img/no wishlist image/nowishlist.png' %}" alt="">
+                         </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+        {% endif %}
     </div>
 
-
+{% block scripts %}
+{#    <script>#}
+{#        $('.btn-num-product-down').on('click', function(e){#}
+{#        e.preventDefault();#}
+{#        var numProduct = Number($(this).next().val());#}
+{#        if(numProduct > 1) $(this).next().val(numProduct - 1);#}
+{#        });#}
+{##}
+{#        $('.btn-num-product-up').on('click', function(e){#}
+{#            e.preventDefault();#}
+{#            var numProduct = Number($(this).prev().val());#}
+{#            $(this).prev().val(numProduct + 1);#}
+{#        });#}
+{#    </script>#}
+{% endblock %}
 
 
 {% endblock content %}

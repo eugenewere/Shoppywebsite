@@ -21,6 +21,7 @@ admin.site.register(Carousel)
 admin.site.register(Inventory)
 admin.site.register(Variant)
 admin.site.register(Variant_Option)
-admin.site.register(Product_Variant)
+admin.site.register(Product_Variant_Options)
 admin.site.register(Payment)
+admin.site.register(OrderProductVariantOption)
 

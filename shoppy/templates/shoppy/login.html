@@ -4,9 +4,11 @@
 <div class="forms-background" >
       <div class="content-section">
           {% if errors %}
-            <ul>
+            <ul class="p-0">
             {% for error in errors %}
-              <p class="bg-danger text-white">{{ error }}</p>
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
             {% endfor %}
             </ul>
           {% endif %}
@@ -14,23 +16,25 @@
           {% if messages %}
             <ul class="messages">
               {% for message in messages %}
-              <p class="bg-danger text-white" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                  <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+                      {{ message }}
+                  </div>
               {% endfor %}
             </ul>
           {% endif %}
 
           {% if form.errors %}
             {% for field in form %}
-            {% for error in field.errors %}
-            <div class="alert alert-danger">
-              <strong class="text-white">{{ error|escape }}</strong>
-            </div>
-            {% endfor %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                      <strong class="text-white">{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
             {% endfor %}
             {% for error in form.non_field_errors %}
-            <div class="alert alert-danger text-white">
-              <strong>{{ error|escape }}</strong>
-            </div>
+                <div class="alert alert-danger text-white">
+                  <strong>{{ error|escape }}</strong>
+                </div>
             {% endfor %}
           {% endif %}
 
@@ -43,7 +47,7 @@
                         <div class="input-group-prepend bg-warning">
                           <span class="input-group-text bg-warning" id="inputGroupPrepend">@</span>
                         </div>
-                        <input name="username" type="email" class="form-control" id="validationCustomUsername" placeholder="Email" aria-describedby="inputGroupPrepend" required><br>
+                        <input name="username" type="" class="form-control" id="validationCustomUsername" placeholder="Email" aria-describedby="inputGroupPrepend" required><br>
                         <small id="passwordHelpBlock" class="form-text text-muted">
                           Your email must be ...@yyy.com.
                         </small>
@@ -91,6 +95,12 @@
                     Need an account? <a href="{% url 'Shoppy:shoppy-buyer-reg' %}" class="ml-2">Sign up</a>
                 </small>
             </div>
+            <div class=" pt-3">
+                <small class="text-muted medium-text">
+                    Forgot Password? <a href="{% url 'Shoppy:password_reset' %}" class="ml-2">Reset</a>
+                </small>
+            </div>
+
       </div>
 </div>
 
